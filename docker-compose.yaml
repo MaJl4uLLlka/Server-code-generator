@@ -17,8 +17,8 @@ services:
       dockerfile: ./images/Dockerfile
       context: .
     volumes:
-      - ".src/backend:/app"
-      - ".src/backend/node_modules:/app/node_modules"
+      - "./src/backend:/app"
+      - "./src/backend/node_modules:/app/node_modules"
     env_file:
       - ./src/env/local.env
     ports:
