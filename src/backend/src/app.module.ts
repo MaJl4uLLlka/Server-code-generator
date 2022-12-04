@@ -1,7 +1,15 @@
-import { Module } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import {
+  Module,
+  NestModule,
+  RequestMethod,
+  MiddlewareConsumer,
+} from '@nestjs/common';
+import { PrismaService } from './services/prisma.service';
+import { RedisService } from './services/redis.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { AuthMiddleware } from './middleware/auth.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -9,8 +17,15 @@ import { UserModule } from './user/user.module';
       envFilePath: '.env',
     }),
     UserModule,
+    AuthModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [PrismaService, RedisService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes({ path: 'users', method: RequestMethod.PUT });
+  }
+}

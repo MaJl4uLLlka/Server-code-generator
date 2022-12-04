@@ -3,7 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../services/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as hashUtil from '../utils/hash';
@@ -58,6 +58,20 @@ export class UserService {
     }
 
     return lodash.omit(user, ['password']);
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not exists');
+    }
+
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
