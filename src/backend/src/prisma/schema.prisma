@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String @id @default(uuid())
+  email           String @unique
+  password        String
+  nick            String @unique
+  stripeAccountId String?
+  repositories    Repository[]
+}
+
+enum RepositoryType {
+  PRIVATE
+  PUBLIC
+}
+
+model Repository {
+  id         String         @id @default(uuid())
+  type       RepositoryType @default(PUBLIC)
+  template   TemplateInfo   @relation(fields: [templateId], references: [id])
+  templateId String         @unique
+  user       User           @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+model TemplateInfo {
+  id                   String @id @default(uuid())
+  repository           Repository?
+  entityTemplate       EntityTemplate @relation(fields: [entityTemplateId], references: [id])
+  entityTemplateId     String @unique
+  serviceTemplate      ServiceTemplate @relation(fields: [serviceTemplateId], references: [id])
+  serviceTemplateId    String @unique
+  controllerTemplate   ControllerTemplate @relation(fields: [controllerTemplateId], references: [id])
+  controllerTemplateId String @unique
+}
+
+model EntityTemplate {
+  id       String @id @default(uuid())
+  template TemplateInfo?
+  value    String
+}
+
+model ServiceTemplate {
+  id       String @id @default(uuid())
+  template TemplateInfo?
+  value    String
+}
+
+model ControllerTemplate {
+  id        String @id @default(uuid())
+  tempalate TemplateInfo?
+  value     String
+}
