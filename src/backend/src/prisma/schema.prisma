@@ -26,38 +26,39 @@ enum RepositoryType {
 
 model Repository {
   id         String         @id @default(uuid())
+  name       String
   type       RepositoryType @default(PUBLIC)
-  template   TemplateInfo   @relation(fields: [templateId], references: [id])
+  template   TemplateInfo   @relation(fields: [templateId], references: [id], onDelete: Cascade)
   templateId String         @unique
-  user       User           @relation(fields: [userId], references: [id])
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
 }
 
 model TemplateInfo {
   id                   String @id @default(uuid())
   repository           Repository?
-  entityTemplate       EntityTemplate @relation(fields: [entityTemplateId], references: [id])
+  entityTemplate       EntityTemplate @relation(fields: [entityTemplateId], references: [id], onDelete: Cascade)
   entityTemplateId     String @unique
-  serviceTemplate      ServiceTemplate @relation(fields: [serviceTemplateId], references: [id])
+  serviceTemplate      ServiceTemplate @relation(fields: [serviceTemplateId], references: [id], onDelete: Cascade)
   serviceTemplateId    String @unique
-  controllerTemplate   ControllerTemplate @relation(fields: [controllerTemplateId], references: [id])
+  controllerTemplate   ControllerTemplate @relation(fields: [controllerTemplateId], references: [id], onDelete: Cascade)
   controllerTemplateId String @unique
 }
 
 model EntityTemplate {
   id       String @id @default(uuid())
   template TemplateInfo?
-  value    String
+  value    String?
 }
 
 model ServiceTemplate {
   id       String @id @default(uuid())
   template TemplateInfo?
-  value    String
+  value    String?
 }
 
 model ControllerTemplate {
   id        String @id @default(uuid())
-  tempalate TemplateInfo?
-  value     String
+  template TemplateInfo?
+  value     String?
 }
