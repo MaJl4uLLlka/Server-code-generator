@@ -19,7 +19,7 @@ export class RepositoryController {
 
   @Post()
   async create(
-    @Req() req: Request,
+    @Req() req: any,
     @Body() createRepositoryDto: CreateRepositoryDto,
   ) {
     const user = req['user'] as User;
@@ -32,14 +32,14 @@ export class RepositoryController {
   }
 
   @Get(':id')
-  async findOne(@Req() req: Request, @Param('id') id: string) {
+  async findOne(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
     return await this.repositoryService.findOne(id, user.id);
   }
 
   @Put(':id')
   async updateRepositoryName(
-    @Req() req: Request,
+    @Req() req: any,
     @Param('id') id: string,
     @Body() updateRepositoryDto: UpdateRepositoryNameDto,
   ) {
@@ -52,7 +52,7 @@ export class RepositoryController {
   }
 
   @Delete(':id')
-  async remove(@Req() req: Request, @Param('id') id: string) {
+  async remove(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
     return await this.repositoryService.remove(id, user.id);
   }

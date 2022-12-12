@@ -1,0 +1,7 @@
+<mat-toolbar color="primary">
+    <a mat-button routerLink="/info">Template service</a>
+    <div class="spacer"></div>
+    <a mat-button routerLink="/repositories">Repositories</a>
+    <a mat-raised-button *ngIf="!isSigned"  routerLink="/sign-up">Sign Up</a>
+    <a mat-raised-button *ngIf="isSigned"  routerLink="/profile">Profile</a>
+</mat-toolbar>

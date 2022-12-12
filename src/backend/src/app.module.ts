@@ -11,10 +11,7 @@ import { UserModule } from './user/user.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
-import { EntityTemplateService } from './template-services/entity-template.service';
-import { ServiceTemplateService } from './template-services/service-template.service';
-import { ControllerTemplateService } from './template-services/controller-template.service';
-import { TemplateInfoService } from './template-services/template-info.service';
+import { ServiceModuleModule } from './template-services/service-module.module';
 
 @Module({
   imports: [
@@ -24,21 +21,18 @@ import { TemplateInfoService } from './template-services/template-info.service';
     UserModule,
     AuthModule,
     RepositoryModule,
+    ServiceModuleModule,
   ],
   controllers: [],
-  providers: [
-    PrismaService,
-    RedisService,
-    EntityTemplateService,
-    ServiceTemplateService,
-    ControllerTemplateService,
-    TemplateInfoService,
-  ],
+  providers: [PrismaService, RedisService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .forRoutes({ path: 'users', method: RequestMethod.PUT });
+      .forRoutes(
+        { path: 'users', method: RequestMethod.PUT },
+        { path: 'auth', method: RequestMethod.GET },
+      );
   }
 }

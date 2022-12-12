@@ -1,0 +1,25 @@
+<div class="form-container">
+    <h1>Registration</h1>
+    <form [formGroup] = "signUpForm">
+        <mat-form-field>
+            <mat-label>Nickname</mat-label>
+            <input matInput formControlName="nick" type="text"/>
+            <mat-error *ngIf="nick?.errors?.['required']">Nickname is required</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="text"/>
+            <mat-error *ngIf="email?.errors?.['required']">Email is required</mat-error>
+            <mat-error *ngIf="email?.errors?.['email']">Invalid email format</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password"/>
+            <mat-error *ngIf="password?.errors?.['required']">Password is required</mat-error>
+        </mat-form-field>
+        <div class="center margin-top">
+            <button mat-raised-button color="primary" type="submit">Register</button>
+        </div>
+        <span class="center margin-top">Already have an account?  <a routerLink="/sign-in">Sign In</a> </span>
+    </form>
+</div>
