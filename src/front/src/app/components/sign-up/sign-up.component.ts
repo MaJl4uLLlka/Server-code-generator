@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,9 +16,12 @@ export class SignUpComponent implements OnInit {
     password: new FormControl('', [Validators.required])
   });
 
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
+
+  ngOnInit(): void {}
 
   get nick() {
     return this.signUpForm.get('nick');
@@ -28,5 +33,15 @@ export class SignUpComponent implements OnInit {
 
   get password() {
     return this.signUpForm.get('password');
+  }
+
+  OnSubmit() {
+    if (this.signUpForm.valid) {
+      this.authService.createUser(this.signUpForm.value as any).subscribe(
+        data => {
+          this.router.navigate(['sign-in']);
+        }
+      );
+    }
   }
 }

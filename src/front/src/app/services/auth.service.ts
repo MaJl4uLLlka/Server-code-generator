@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { APPLICATION_DOMAIN } from '../config';
 import { HttpClient } from '@angular/common/http';
-import { AuthInputDto, AuthOutputDto } from '../dto/index';
+import { AuthInputDto, AuthOutputDto, CreateUserData } from '../dto/index';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +20,9 @@ export class AuthService {
         'app-auth': `${localStorage.getItem('token')}`
       }
     });
+  }
+
+  createUser(userData: CreateUserData) {
+    return this.httpClient.post(APPLICATION_DOMAIN + '/users', userData);
   }
 }

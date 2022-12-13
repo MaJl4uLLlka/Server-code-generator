@@ -1,6 +1,6 @@
 <div class="form-container">
     <h1>Registration</h1>
-    <form [formGroup] = "signUpForm">
+    <form [formGroup] = "signUpForm" (ngSubmit)="OnSubmit()">
         <mat-form-field>
             <mat-label>Nickname</mat-label>
             <input matInput formControlName="nick" type="text"/>
