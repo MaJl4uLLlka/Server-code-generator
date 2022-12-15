@@ -22,6 +22,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { ProfileComponent } from './components/profile/profile.component';
 import { InfoComponent } from './components/info/info.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { InfoComponent } from './components/info/info.component';
     MatPaginatorModule,
     MatGridListModule,
     HttpClientModule,
+    MatExpansionModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
