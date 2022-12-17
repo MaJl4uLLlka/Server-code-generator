@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { AuthInputDto } from '../../dto';
 import { Router } from '@angular/router';
 import { CommonService } from '../../services/common-service.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',
@@ -21,7 +22,9 @@ export class SignInComponent implements OnInit {
   constructor(
     private router: Router,
     private commonService: CommonService,
-    private readonly authService: AuthService) {}
+    private readonly authService: AuthService,
+    private snackBar: MatSnackBar,
+  ) {}
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');
@@ -48,9 +51,9 @@ export class SignInComponent implements OnInit {
           this.commonService.sendUpdate({ isSigned: true });
           this.router.navigate(['profile']);
         },
-        error => {
-          console.log(error);
-          this.errors.push(error);
+        err => {
+          console.log(err.error.message);
+          this.snackBar.open(err.error.message, undefined, { duration: 2000 } );
         }
       )
     }

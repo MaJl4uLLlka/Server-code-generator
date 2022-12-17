@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,6 +20,7 @@ export class SignUpComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit(): void {}
@@ -40,6 +42,10 @@ export class SignUpComponent implements OnInit {
       this.authService.createUser(this.signUpForm.value as any).subscribe(
         data => {
           this.router.navigate(['sign-in']);
+        },
+        err => {
+          console.log(err.error.message);
+          this.snackBar.open(err.error.message, undefined, { duration: 2000 } );
         }
       );
     }

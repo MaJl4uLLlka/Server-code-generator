@@ -23,6 +23,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { ProfileComponent } from './components/profile/profile.component';
 import { InfoComponent } from './components/info/info.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatGridListModule,
     HttpClientModule,
     MatExpansionModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
