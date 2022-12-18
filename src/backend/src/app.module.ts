@@ -30,6 +30,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes(
       { path: 'users', method: RequestMethod.PUT },
+      { path: 'users', method: RequestMethod.GET },
       { path: 'auth', method: RequestMethod.GET },
       { path: 'repositories', method: RequestMethod.POST },
       { path: 'repositories/user-repositories', method: RequestMethod.GET },

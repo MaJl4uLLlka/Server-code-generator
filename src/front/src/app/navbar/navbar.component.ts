@@ -36,4 +36,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     )
   }
+
+  logout() {
+    localStorage.clear();
+    this.isSigned = false;
+    this.router.navigate(['info']);
+  }
 }

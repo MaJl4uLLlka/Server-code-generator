@@ -27,6 +27,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RepositoryComponent } from './components/repository/repository.component';
 import {MatIconModule} from '@angular/material/icon';
+import { ProfileSettingsComponent } from './components/profile/profile-settings/profile-settings.component';
+import { SubscriptionComponent } from './components/profile/subscription/subscription.component';
+import { CreateRepositoryComponent } from './components/repositories/create-repository/create-repository.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,10 @@ import {MatIconModule} from '@angular/material/icon';
     UserRepositoriesComponent,
     ProfileComponent,
     InfoComponent,
-    RepositoryComponent
+    RepositoryComponent,
+    ProfileSettingsComponent,
+    SubscriptionComponent,
+    CreateRepositoryComponent
   ],
   imports: [
     BrowserModule,
@@ -61,6 +69,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatInputModule,
     MatProgressSpinnerModule,
     MatIconModule,
+    MatButtonToggleModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

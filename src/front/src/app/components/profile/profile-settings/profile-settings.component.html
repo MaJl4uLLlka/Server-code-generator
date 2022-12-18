@@ -1,0 +1,13 @@
+<div class="form-container">
+    <h1>User Info</h1>
+    <form [formGroup] = "userInfoForm" (ngSubmit)="OnSubmit()">
+        <mat-form-field>
+            <mat-label>Nickname</mat-label>
+            <input matInput formControlName="nick" type="text"/>
+            <mat-error *ngIf="nick?.errors?.['required']">Nickname is required</mat-error>
+        </mat-form-field>
+        <div class="center margin-top">
+            <button mat-raised-button color="primary" type="submit">Update</button>
+        </div>
+    </form>
+</div>

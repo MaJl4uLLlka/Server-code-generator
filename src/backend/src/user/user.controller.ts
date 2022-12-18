@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from '@prisma/client';
 
 @Controller('users')
 export class UserController {
@@ -12,17 +13,15 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.userService.findOne(id);
+  @Get()
+  async findOne(@Req() req: any) {
+    const user = req['user'] as User;
+    return await this.userService.findOne(user.id);
   }
 
-  @Put(':id')
-  async update(
-    @Req() req: any,
-    @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return await this.userService.update(id, updateUserDto);
+  @Put()
+  async update(@Req() req: any, @Body() updateUserDto: UpdateUserDto) {
+    const user = req['user'] as User;
+    return await this.userService.update(user.id, updateUserDto);
   }
 }

@@ -51,4 +51,12 @@ export class RepositoryService {
       map(repos => repos.map(value => { return { id: value.id, name: `@${value.user.nick}/${value.name}`, type: value.type } as Repository }))
     );
   }
+
+  createRepository(repositoryData: { name: string, type: string }) {
+    return this.http.post(APPLICATION_DOMAIN + '/repositories', repositoryData, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
 }
