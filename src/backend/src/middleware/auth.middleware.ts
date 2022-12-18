@@ -31,7 +31,7 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     const userId = userData['id'] as string;
-    const user = this.userService.findOne(userId);
+    const user = await this.userService.findOne(userId);
     req['user'] = user;
     next();
   }

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
 import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { User } from '@prisma/client';
 import { TemplateInfoService } from '../template-services/template-info.service';
@@ -22,6 +23,7 @@ export class RepositoryService {
   ) {}
 
   async create(createRepositoryDto: CreateRepositoryDto, user: User) {
+    console.log(user);
     const repositoriesWithThisName =
       await this.prismaService.repository.findMany({
         where: {
@@ -40,18 +42,27 @@ export class RepositoryService {
     const repository = await this.prismaService.repository.create({
       data: {
         ...(createRepositoryDto as any),
+        templateId: emptyTemplate.id,
         userId: user.id,
-        template: emptyTemplate,
       },
     });
 
     return repository;
   }
 
-  async findAllByUserId(userId: string) {
+  async findAllByUserId(userId: string, query: RepositoryQuery) {
     const repositories = await this.prismaService.repository.findMany({
       where: {
         userId: userId,
+      },
+      skip: +query.page * +query.take,
+      take: +query.take,
+      include: {
+        user: {
+          select: {
+            nick: true,
+          },
+        },
       },
     });
 
@@ -62,10 +73,19 @@ export class RepositoryService {
     return repositories;
   }
 
-  async findAllPublicRepositories() {
+  async findAllPublicRepositories(query: RepositoryQuery) {
     const repositories = await this.prismaService.repository.findMany({
       where: {
         type: RepositoryType.PUBLIC,
+      },
+      skip: +query.page * +query.take,
+      take: +query.take,
+      include: {
+        user: {
+          select: {
+            nick: true,
+          },
+        },
       },
     });
 
@@ -141,5 +161,25 @@ export class RepositoryService {
     });
 
     return deleted;
+  }
+
+  async getCountOfPublicRepositories() {
+    const count = await this.prismaService.repository.count({
+      where: {
+        type: RepositoryType.PUBLIC,
+      },
+    });
+
+    return { count: count };
+  }
+
+  async getCountOfUserRepositories(userId: string) {
+    const count = await this.prismaService.repository.count({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return { count: count };
   }
 }

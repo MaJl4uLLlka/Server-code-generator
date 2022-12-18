@@ -28,11 +28,15 @@ import { ServiceModuleModule } from './template-services/service-module.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .forRoutes(
-        { path: 'users', method: RequestMethod.PUT },
-        { path: 'auth', method: RequestMethod.GET },
-      );
+    consumer.apply(AuthMiddleware).forRoutes(
+      { path: 'users', method: RequestMethod.PUT },
+      { path: 'auth', method: RequestMethod.GET },
+      { path: 'repositories', method: RequestMethod.POST },
+      { path: 'repositories/user-repositories', method: RequestMethod.GET },
+      {
+        path: 'repositories/user-repositories/count',
+        method: RequestMethod.GET,
+      },
+    );
   }
 }

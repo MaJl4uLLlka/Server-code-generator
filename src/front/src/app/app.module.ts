@@ -24,6 +24,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { InfoComponent } from './components/info/info.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RepositoryComponent } from './components/repository/repository.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     PrivateRepositoriesComponent,
     UserRepositoriesComponent,
     ProfileComponent,
-    InfoComponent
+    InfoComponent,
+    RepositoryComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     HttpClientModule,
     MatExpansionModule,
     MatSnackBarModule,
+    MatInputModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -22,9 +22,21 @@ export class TemplateInfoService {
 
     const template = await this.prismaService.templateInfo.create({
       data: {
-        entityTemplate: entityTemplate,
-        serviceTemplate: serviceTemplate,
-        controllerTemplate: controllerTemplate,
+        entityTemplate: {
+          connect: {
+            id: entityTemplate.id,
+          },
+        },
+        serviceTemplate: {
+          connect: {
+            id: serviceTemplate.id,
+          },
+        },
+        controllerTemplate: {
+          connect: {
+            id: controllerTemplate.id,
+          },
+        },
       },
     });
 

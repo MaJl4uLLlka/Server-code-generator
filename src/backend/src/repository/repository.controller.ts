@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
 import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import { RepositoryQuery } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
 
 @Controller('repositories')
@@ -27,8 +29,28 @@ export class RepositoryController {
   }
 
   @Get()
-  async findAll() {
-    return await this.repositoryService.findAllPublicRepositories();
+  async findAllPublic(@Query() query: RepositoryQuery) {
+    return await this.repositoryService.findAllPublicRepositories(query);
+  }
+
+  @Get('count')
+  async getPublicRepositoriesCount() {
+    return await this.repositoryService.getCountOfPublicRepositories();
+  }
+
+  @Get('user-repositories')
+  async findAllUserRepositories(
+    @Req() req: any,
+    @Query() query: RepositoryQuery,
+  ) {
+    const user = req['user'] as User;
+    return await this.repositoryService.findAllByUserId(user.id, query);
+  }
+
+  @Get('user-repositories/count')
+  async getCountOfUserRepositories(@Req() req: any) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getCountOfUserRepositories(user.id);
   }
 
   @Get(':id')
@@ -55,5 +77,10 @@ export class RepositoryController {
   async remove(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
     return await this.repositoryService.remove(id, user.id);
+  }
+
+  @Get('private')
+  async findAllPrivate(@Query() query: RepositoryQuery) {
+    return await this.repositoryService.findAllPublicRepositories(query);
   }
 }

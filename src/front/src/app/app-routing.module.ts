@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { InfoComponent } from './components/info/info.component';
+import { RepositoryComponent } from './components/repository/repository.component';
 
 const routes: Routes = [
   { path: 'info', pathMatch: 'full', component: InfoComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'sign-in', pathMatch: 'full' , component: SignInComponent },
   { path: 'repositories', pathMatch: 'full', component: RepositoriesComponent },
   { path: 'profile', pathMatch: 'full', component: ProfileComponent },
+  { path: 'repositories/:repositoryId', pathMatch: 'prefix', component: RepositoryComponent},
 ];
 
 @NgModule({
