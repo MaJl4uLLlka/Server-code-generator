@@ -1,7 +1,15 @@
 <div class="mat-elevation-z8">
-    <div class="spinner-container" *ngIf="dataSource.loading$ | async">
-      <mat-spinner></mat-spinner>
-    </div>
+
+    <p>
+        <mat-toolbar>
+          <span>Search here</span>
+          <span class="example-spacer"></span>
+
+          <button mat-mini-fab color="accent" aria-label="icon button with a plus icon">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-toolbar>
+    </p>
   
       <table mat-table [dataSource]="dataSource">
   
@@ -21,9 +29,9 @@
         <tr class="repository" mat-row *matRowDef="let row; columns: displayedColumns;" routerLink="/repositories/{{row.id}}"></tr>
       </table>
     
-      <mat-paginator [pageSize]="7"
+      <mat-paginator [pageSize]="5"
                      [length]="dataSource.countRepositories"
-                     [pageSizeOptions]="[7]"
+                     [pageSizeOptions]="[5]"
                      showFirstLastButtons
                      aria-label="Select page of public repositories">
       </mat-paginator>

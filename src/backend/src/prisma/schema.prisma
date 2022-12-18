@@ -17,6 +17,8 @@ model User {
   nick            String @unique
   stripeAccountId String?
   repositories    Repository[]
+  subscriptions   Subscription[]
+  privateRepositoryAccess PrivateRepositoryAccess[]
 }
 
 enum RepositoryType {
@@ -32,6 +34,7 @@ model Repository {
   templateId String         @unique
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
+  privateRepositoryAccess  PrivateRepositoryAccess[]
 }
 
 model TemplateInfo {
@@ -61,4 +64,19 @@ model ControllerTemplate {
   id        String @id @default(uuid())
   template TemplateInfo?
   value     String?
+}
+
+model Subscription {
+  id String @id @default(uuid())
+  stripeSubsctiptionId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
+
+model PrivateRepositoryAccess {
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repositoryId String
 }

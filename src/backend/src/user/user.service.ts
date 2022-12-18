@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../services/prisma.service';
+import { StripeService } from '../services/stripe.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as hashUtil from '../utils/hash';
@@ -11,7 +12,10 @@ import * as lodash from 'lodash';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private stripeService: StripeService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const userByEmail = await this.prismaService.user.findUnique({
@@ -34,12 +38,17 @@ export class UserService {
       throw new BadRequestException('Nickname must be unique');
     }
 
+    const customer = await this.stripeService.createCustomer(
+      createUserDto.email,
+    );
+
     const hash = await hashUtil.getHash(createUserDto.password);
 
     const user = await this.prismaService.user.create({
       data: {
         ...createUserDto,
         password: hash,
+        stripeAccountId: customer.id,
       },
     });
 

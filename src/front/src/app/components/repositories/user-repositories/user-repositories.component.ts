@@ -59,7 +59,7 @@ class UserRepositoriesDataSource implements DataSource<Repository> {
       this.countRepositoriesSubject.complete();
   }
 
-  loadRepositories(page = 0, pageSize = 7) {
+  loadRepositories(page = 0, pageSize = 5) {
 
       this.loadingSubject.next(true);
 

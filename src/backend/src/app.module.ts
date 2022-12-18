@@ -4,14 +4,13 @@ import {
   RequestMethod,
   MiddlewareConsumer,
 } from '@nestjs/common';
-import { PrismaService } from './services/prisma.service';
-import { RedisService } from './services/redis.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
 import { ServiceModuleModule } from './template-services/service-module.module';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -22,9 +21,10 @@ import { ServiceModuleModule } from './template-services/service-module.module';
     AuthModule,
     RepositoryModule,
     ServiceModuleModule,
+    ServicesModule,
   ],
   controllers: [],
-  providers: [PrismaService, RedisService],
+  providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

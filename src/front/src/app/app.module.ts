@@ -26,6 +26,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RepositoryComponent } from './components/repository/repository.component';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { RepositoryComponent } from './components/repository/repository.componen
     MatSnackBarModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
