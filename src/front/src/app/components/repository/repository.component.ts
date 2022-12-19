@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RepositoryService } from '../../services/repository-service.service';
 
 @Component({
   selector: 'app-repository',
@@ -13,7 +14,7 @@ export class RepositoryComponent {
   serviceTemplate: string =  '(empty)';
   entityTemplate: string =  '(empty)';
 
-  constructor(private activatedRoute: ActivatedRoute){
+  constructor(private activatedRoute: ActivatedRoute, private repositoryService: RepositoryService){
     this.id = activatedRoute.snapshot.params['repositoryId'];
   }
 }

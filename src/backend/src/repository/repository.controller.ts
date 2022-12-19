@@ -11,7 +11,10 @@ import {
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import {
+  UpdateRepositoryNameDto,
+  ShareRepositoryDto,
+} from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
 
@@ -59,6 +62,20 @@ export class RepositoryController {
     return await this.repositoryService.findOne(id, user.id);
   }
 
+  @Post(':id/share')
+  async shareWithUser(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() userData: ShareRepositoryDto,
+  ) {
+    const user = req['user'] as User;
+    return await this.repositoryService.shareRepositoryToUser(
+      id,
+      user.id,
+      userData.nick,
+    );
+  }
+
   @Put(':id')
   async updateRepositoryName(
     @Req() req: any,
@@ -82,5 +99,10 @@ export class RepositoryController {
   @Get('private')
   async findAllPrivate(@Query() query: RepositoryQuery) {
     return await this.repositoryService.findAllPublicRepositories(query);
+  }
+
+  @Get('private/count')
+  async getPrivateRepositoriesCount() {
+    return 1;
   }
 }

@@ -10,6 +10,10 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { InfoComponent } from './components/info/info.component';
 import { RepositoryComponent } from './components/repository/repository.component';
 import { CreateRepositoryComponent } from './components/repositories/create-repository/create-repository.component';
+import { DeleteRepositoryComponent } from './components/repository/delete-repository/delete-repository.component';
+import { UpdateRepositoryComponent } from './components/repository/update-repository/update-repository.component';
+import { ShareRepositoryComponent } from './components/repository/share-repository/share-repository.component';
+import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
 
 const routes: Routes = [
   { path: 'info', pathMatch: 'full', component: InfoComponent },
@@ -18,7 +22,11 @@ const routes: Routes = [
   { path: 'repositories', pathMatch: 'full', component: RepositoriesComponent },
   { path: 'profile', pathMatch: 'full', component: ProfileComponent },
   { path: 'repositories/create', pathMatch: 'full', component: CreateRepositoryComponent },
-  { path: 'repositories/:repositoryId', pathMatch: 'prefix', component: RepositoryComponent},
+  { path: 'repositories/share/:repositoryId', pathMatch: 'full', component: ShareRepositoryComponent},
+  { path: 'repositories/drop/:repositoryId', pathMatch: 'full', component: DeleteRepositoryComponent},
+  { path: 'repositories/update/:repositoryId', pathMatch: 'full', component: UpdateRepositoryComponent },
+  { path: 'repositories/:repositoryId', pathMatch: 'full', component: RepositoryComponent},
+  { path: 'repositories/:repositoryId/templates', pathMatch: 'full', component: UpdateTemplatesComponent},
 ];
 
 @NgModule({

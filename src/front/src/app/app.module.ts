@@ -32,6 +32,11 @@ import { SubscriptionComponent } from './components/profile/subscription/subscri
 import { CreateRepositoryComponent } from './components/repositories/create-repository/create-repository.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
+import {MatMenuModule} from '@angular/material/menu';
+import { DeleteRepositoryComponent } from './components/repository/delete-repository/delete-repository.component';
+import { UpdateRepositoryComponent } from './components/repository/update-repository/update-repository.component';
+import { ShareRepositoryComponent } from './components/repository/share-repository/share-repository.component';
+import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +53,11 @@ import {MatSelectModule} from '@angular/material/select';
     RepositoryComponent,
     ProfileSettingsComponent,
     SubscriptionComponent,
-    CreateRepositoryComponent
+    CreateRepositoryComponent,
+    DeleteRepositoryComponent,
+    UpdateRepositoryComponent,
+    ShareRepositoryComponent,
+    UpdateTemplatesComponent
   ],
   imports: [
     BrowserModule,
@@ -71,6 +80,7 @@ import {MatSelectModule} from '@angular/material/select';
     MatIconModule,
     MatButtonToggleModule,
     MatSelectModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

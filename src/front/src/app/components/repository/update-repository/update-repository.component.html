@@ -1,0 +1,13 @@
+<div class="form-container">
+    <h1>Update Repository</h1>
+    <form [formGroup] = "repositoryForm" (ngSubmit)="OnSubmit()">
+        <mat-form-field>
+            <mat-label>Repository name</mat-label>
+            <input matInput formControlName="name" type="text"/>
+            <mat-error *ngIf="repoName?.errors?.['required']">Repository name is required</mat-error>
+        </mat-form-field>
+        <div class="center margin-top">
+            <button mat-raised-button color="primary" type="submit">Update</button>
+        </div>
+    </form>
+</div>

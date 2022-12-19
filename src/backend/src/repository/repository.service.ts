@@ -182,4 +182,31 @@ export class RepositoryService {
 
     return { count: count };
   }
+
+  async shareRepositoryToUser(
+    repositoryId: string,
+    ownerId: string,
+    userNickName: string,
+  ) {
+    const repository = await this.findOne(repositoryId, ownerId);
+
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        nick: userNickName,
+      },
+    });
+
+    if (user.id === ownerId) {
+      throw new BadRequestException('You are owner of this repository');
+    }
+
+    const shared = await this.prismaService.privateRepositoryAccess.create({
+      data: {
+        repositoryId: repository.id,
+        userId: user.id,
+      },
+    });
+
+    return shared;
+  }
 }
