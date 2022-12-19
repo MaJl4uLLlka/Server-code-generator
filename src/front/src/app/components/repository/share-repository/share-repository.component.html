@@ -1,1 +1,13 @@
-<p>share-repository works!</p>
+<div class="form-container">
+    <h1>Share Repository</h1>
+    <form [formGroup] = "repositoryForm" (ngSubmit)="OnSubmit()">
+        <mat-form-field>
+            <mat-label>Nick name</mat-label>
+            <input matInput formControlName="nick" type="text"/>
+            <mat-error *ngIf="nick?.errors?.['required']">Nickname is required</mat-error>
+        </mat-form-field>
+        <div class="center margin-top">
+            <button mat-raised-button color="primary" type="submit">Share</button>
+        </div>
+    </form>
+</div>

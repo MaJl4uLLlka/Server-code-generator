@@ -84,4 +84,12 @@ export class RepositoryService {
       }
     });
   }
+
+  shareRepository(repositoryId: string, user: {nick: string}) {
+    return this.http.post(APPLICATION_DOMAIN + '/repositories/' + repositoryId + '/share', user, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
 }
