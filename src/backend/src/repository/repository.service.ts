@@ -54,6 +54,10 @@ export class RepositoryService {
     const repositories = await this.prismaService.repository.findMany({
       where: {
         userId: userId,
+        name: {
+          contains: query.filter,
+          mode: 'insensitive',
+        },
       },
       skip: +query.page * +query.take,
       take: +query.take,
@@ -77,6 +81,10 @@ export class RepositoryService {
     const repositories = await this.prismaService.repository.findMany({
       where: {
         type: RepositoryType.PUBLIC,
+        name: {
+          contains: query.filter,
+          mode: 'insensitive',
+        },
       },
       skip: +query.page * +query.take,
       take: +query.take,
@@ -163,20 +171,28 @@ export class RepositoryService {
     return deleted;
   }
 
-  async getCountOfPublicRepositories() {
+  async getCountOfPublicRepositories(filter = '') {
     const count = await this.prismaService.repository.count({
       where: {
         type: RepositoryType.PUBLIC,
+        name: {
+          contains: filter,
+          mode: 'insensitive',
+        },
       },
     });
 
     return { count: count };
   }
 
-  async getCountOfUserRepositories(userId: string) {
+  async getCountOfUserRepositories(userId: string, filter = '') {
     const count = await this.prismaService.repository.count({
       where: {
         userId: userId,
+        name: {
+          contains: filter,
+          mode: 'insensitive',
+        },
       },
     });
 
@@ -208,5 +224,46 @@ export class RepositoryService {
     });
 
     return shared;
+  }
+
+  async findAllPrivateAvilable(userId: string, query: RepositoryQuery) {
+    const count = await this.prismaService.privateRepositoryAccess.count({
+      where: {
+        userId: userId,
+      },
+    });
+
+    const repos: any[] = [];
+
+    if (count >= +query.page * +query.take + query.take) {
+      repos.push(
+        (
+          await this.prismaService.privateRepositoryAccess.findMany({
+            where: {
+              userId: userId,
+            },
+            include: {
+              repository: true,
+            },
+          })
+        ).map((element) => element.repository),
+      );
+    }
+  }
+
+  async fillTemplates(repositoryId: string, userId: string = null) {
+    const result: any = {};
+    const repository = await this.prismaService.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+    });
+
+    if (!userId && repository.type === RepositoryType.PRIVATE) {
+      result.needRedirect = true;
+      return result;
+    }
+
+    result.value = {};
   }
 }

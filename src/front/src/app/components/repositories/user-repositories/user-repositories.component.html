@@ -1,15 +1,16 @@
 <div class="mat-elevation-z8">
 
-    <p>
-        <mat-toolbar>
-          <span>Search here</span>
-          <span class="example-spacer"></span>
+  <br>
+  <div class="panel">
+    <mat-form-field class="position-center">
+      <mat-label>Search repositories</mat-label>
+      <input matInput  type="text" #input/>
+    </mat-form-field>
 
-          <button mat-mini-fab color="accent" aria-label="icon button with a plus icon" routerLink="/repositories/create">
-            <mat-icon>add</mat-icon>
-          </button>
-        </mat-toolbar>
-    </p>
+    <button mat-mini-fab color="accent" aria-label="icon button with a plus icon" routerLink="/repositories/create">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
   
       <table mat-table [dataSource]="dataSource">
   

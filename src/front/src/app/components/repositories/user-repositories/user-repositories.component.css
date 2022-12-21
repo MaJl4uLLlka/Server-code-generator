@@ -1,7 +1,14 @@
-.example-spacer {
-    flex: 1 1 auto;
-}
-  
 .repository:hover {
     cursor: pointer;
+}
+
+.position-center {
+    display: block;
+    margin: 0 auto;
+    width: 40em;
+}
+
+.panel {
+    display: flex;
+    width: 95%;
 }

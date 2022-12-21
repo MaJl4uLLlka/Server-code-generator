@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit, ElementRef } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { Repository } from '../../../dto/repository';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { BehaviorSubject, catchError, finalize, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, debounceTime, finalize, fromEvent, Observable, of, tap } from 'rxjs';
 import { RepositoryService } from '../../../services/repository-service.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class UserRepositoriesComponent implements AfterViewInit, OnInit {
   constructor(private repositoryService: RepositoryService) {}
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('input') input: ElementRef;
 
   ngOnInit(): void {
     this.dataSource = new UserRepositoriesDataSource(this.repositoryService);
@@ -25,6 +26,17 @@ export class UserRepositoriesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
+
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.loadRepositoriesCount();
+          this.loadRepositoriesPage();
+        })
+      )
+      .subscribe();
+
     this.paginator.page
       .pipe(
         tap(() => this.loadRepositoriesPage())
@@ -34,9 +46,14 @@ export class UserRepositoriesComponent implements AfterViewInit, OnInit {
 
   loadRepositoriesPage() {
     this.dataSource.loadRepositories(
+      this.input.nativeElement.value,
       this.paginator.pageIndex,
       this.paginator.pageSize,
     );
+  }
+
+  loadRepositoriesCount() {
+    this.dataSource.loadRepositoriesCount(this.input.nativeElement.value);
   }
 }
 
@@ -59,19 +76,19 @@ class UserRepositoriesDataSource implements DataSource<Repository> {
       this.countRepositoriesSubject.complete();
   }
 
-  loadRepositories(page = 0, pageSize = 5) {
+  loadRepositories(filter = '', page = 0, pageSize = 5) {
 
       this.loadingSubject.next(true);
 
-      this.repositoryService.findUserRepositories(page, pageSize).pipe(
+      this.repositoryService.findUserRepositories(filter, page, pageSize).pipe(
           catchError(() => of([])),
           finalize(() => this.loadingSubject.next(false))
       )
       .subscribe(repositories => this.repositoriesSubject.next(repositories));
   }
   
-  loadRepositoriesCount() {
-    this.repositoryService.getCountOfUserRepositories()
+  loadRepositoriesCount(filter = '') {
+    this.repositoryService.getCountOfUserRepositories(filter)
       .subscribe(count => {
         this.countRepositoriesSubject.next(count);
         this.countRepositories = this.countRepositoriesSubject.value;

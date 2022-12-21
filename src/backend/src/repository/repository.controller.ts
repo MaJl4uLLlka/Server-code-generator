@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   Query,
+  Res,
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
@@ -15,7 +16,7 @@ import {
   UpdateRepositoryNameDto,
   ShareRepositoryDto,
 } from './dto/update-repository.dto';
-import { RepositoryQuery } from './dto/get-repository.dto';
+import { RepositoryQuery, RepositoryFilter } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
 
 @Controller('repositories')
@@ -31,14 +32,18 @@ export class RepositoryController {
     return await this.repositoryService.create(createRepositoryDto, user);
   }
 
-  @Get()
+  @Get('public/all')
   async findAllPublic(@Query() query: RepositoryQuery) {
     return await this.repositoryService.findAllPublicRepositories(query);
   }
 
-  @Get('count')
-  async getPublicRepositoriesCount() {
-    return await this.repositoryService.getCountOfPublicRepositories();
+  @Get('public/count')
+  async getPublicRepositoriesCount(
+    @Query() repositoryFilter: RepositoryFilter,
+  ) {
+    return await this.repositoryService.getCountOfPublicRepositories(
+      repositoryFilter.filter,
+    );
   }
 
   @Get('user-repositories')
@@ -51,9 +56,15 @@ export class RepositoryController {
   }
 
   @Get('user-repositories/count')
-  async getCountOfUserRepositories(@Req() req: any) {
+  async getCountOfUserRepositories(
+    @Req() req: any,
+    @Query() repositoriesFilter: RepositoryFilter,
+  ) {
     const user = req['user'] as User;
-    return await this.repositoryService.getCountOfUserRepositories(user.id);
+    return await this.repositoryService.getCountOfUserRepositories(
+      user.id,
+      repositoriesFilter.filter,
+    );
   }
 
   @Get(':id')
@@ -105,4 +116,9 @@ export class RepositoryController {
   async getPrivateRepositoriesCount() {
     return 1;
   }
+
+  // @Get(':id/fill')
+  // async getPreparedCode(@Res() res) {
+  //   return await this.repositoryService.
+  // }
 }

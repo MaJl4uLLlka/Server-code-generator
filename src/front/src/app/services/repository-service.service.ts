@@ -1,5 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 import { map, Observable } from 'rxjs';
 import { DeleteRepositoryComponent } from '../components/repository/delete-repository/delete-repository.component';
 import { APPLICATION_DOMAIN } from '../config';
@@ -12,9 +13,10 @@ export class RepositoryService {
 
   constructor(private http: HttpClient) { }
 
-  findPublicRepositories(page: number, pageSize: number): Observable<Repository[]> {
-    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories', {
+  findPublicRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
+    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/public/all', {
       params: new HttpParams()
+            .set('filter', filter)
             .set('page', page.toString())
             .set('take', pageSize.toString())
     }).pipe(
@@ -22,27 +24,33 @@ export class RepositoryService {
     );
   }
 
-  getCountOfPublicRepositories(): Observable<number> {
-    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/count')
-    .pipe(
-      map(res => res.count)
-    );
-  }
-
-  getCountOfUserRepositories(): Observable<number> {
-    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/user-repositories/count', {
-      headers: {
-        'app-auth': `${localStorage.getItem('token')}`
-      }
+  getCountOfPublicRepositories(filter = ''): Observable<number> {
+    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/public/count', {
+      params: new HttpParams()
+              .set('filter', filter)
     })
     .pipe(
       map(res => res.count)
     );
   }
 
-  findUserRepositories(page: number, pageSize: number): Observable<Repository[]> {
+  getCountOfUserRepositories(filter = ''): Observable<number> {
+    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/user-repositories/count', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      },
+      params: new HttpParams()
+              .set('filter', filter)
+    })
+    .pipe(
+      map(res => res.count)
+    );
+  }
+
+  findUserRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
     return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/user-repositories', {
       params: new HttpParams()
+            .set('filter', filter)
             .set('page', page.toString())
             .set('take', pageSize.toString()),
       headers: {
