@@ -1,0 +1,11 @@
+.card-expire-date {
+    display: flex;
+}
+
+.expire-date-field {
+    width: 20%;
+}
+
+.spacer {
+    flex-basis: 40%;
+}

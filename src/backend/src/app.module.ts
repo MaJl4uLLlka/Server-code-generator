@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
 import { ServiceModuleModule } from './template-services/service-module.module';
 import { ServicesModule } from './services/services.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ServicesModule } from './services/services.module';
     RepositoryModule,
     ServiceModuleModule,
     ServicesModule,
+    SubscriptionModule,
   ],
   controllers: [],
   providers: [],
