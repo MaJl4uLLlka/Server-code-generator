@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Repository } from '../../../dto/repository';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import { BehaviorSubject, catchError, finalize, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, fromEvent, Observable, of, tap } from 'rxjs';
 import { RepositoryService } from '../../../services/repository-service.service';
 
 @Component({
@@ -11,9 +11,9 @@ import { RepositoryService } from '../../../services/repository-service.service'
   templateUrl: './private-repositories.component.html',
   styleUrls: ['./private-repositories.component.css']
 })
-export class PrivateRepositoriesComponent {
+export class PrivateRepositoriesComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['name', 'type'];
-  dataSource: PublicRepositoriesDataSource;
+  dataSource: PrivateRepositoriesDataSource;
 
   constructor(private repositoryService: RepositoryService) {}
 
@@ -21,12 +21,22 @@ export class PrivateRepositoriesComponent {
   @ViewChild('input') input: ElementRef;
 
   ngOnInit(): void {
-    this.dataSource = new PublicRepositoriesDataSource(this.repositoryService);
+    this.dataSource = new PrivateRepositoriesDataSource(this.repositoryService);
     this.dataSource.loadRepositoriesCount();
     this.dataSource.loadRepositories();
   }
 
   ngAfterViewInit() {
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.loadRepositoriesCount();
+          this.loadRepositoriesPage();
+        })
+      )
+      .subscribe();
+
     this.paginator.page
       .pipe(
         tap(() => this.loadRepositoriesPage())
@@ -41,9 +51,13 @@ export class PrivateRepositoriesComponent {
       this.paginator.pageSize,
     );
   }
+
+  loadRepositoriesCount() {
+    this.dataSource.loadRepositoriesCount(this.input.nativeElement.value);
+  }
 }
 
-class PublicRepositoriesDataSource implements DataSource<Repository> {
+class PrivateRepositoriesDataSource implements DataSource<Repository> {
   private repositoriesSubject = new BehaviorSubject<Repository[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private countRepositoriesSubject = new BehaviorSubject<number>(0);
@@ -62,11 +76,11 @@ class PublicRepositoriesDataSource implements DataSource<Repository> {
       this.countRepositoriesSubject.complete();
   }
 
-  loadRepositories(filter = '',page = 0, pageSize = 7) {
+  loadRepositories(filter = '',page = 0, pageSize = 5) {
 
       this.loadingSubject.next(true);
 
-      this.repositoryService.findPublicRepositories(filter, page, pageSize).pipe(
+      this.repositoryService.findPrivateRepositories(filter, page, pageSize).pipe(
           catchError(() => of([])),
           finalize(() => this.loadingSubject.next(false))
       )
@@ -74,7 +88,7 @@ class PublicRepositoriesDataSource implements DataSource<Repository> {
   }
   
   loadRepositoriesCount(filter = '') {
-    this.repositoryService.getCountOfPublicRepositories(filter)
+    this.repositoryService.getCountOfPrivateRepositories(filter)
       .subscribe(count => {
         this.countRepositoriesSubject.next(count);
         this.countRepositories = this.countRepositoriesSubject.value;

@@ -24,9 +24,9 @@
       <tr class="repository" mat-row *matRowDef="let row; columns: displayedColumns;" routerLink="/repositories/{{row.id}}"></tr>
     </table>
   
-    <mat-paginator [pageSize]="7"
+    <mat-paginator [pageSize]="5"
                    [length]="dataSource.countRepositories"
-                   [pageSizeOptions]="[7]"
+                   [pageSizeOptions]="[5]"
                    showFirstLastButtons
                    aria-label="Select page of public repositories">
     </mat-paginator>

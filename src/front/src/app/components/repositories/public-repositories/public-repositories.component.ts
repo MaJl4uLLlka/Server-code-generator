@@ -76,7 +76,7 @@ class PublicRepositoriesDataSource implements DataSource<Repository> {
       this.countRepositoriesSubject.complete();
   }
 
-  loadRepositories(filter = '', page = 0, pageSize = 7) {
+  loadRepositories(filter = '', page = 0, pageSize = 5) {
 
       this.loadingSubject.next(true);
 

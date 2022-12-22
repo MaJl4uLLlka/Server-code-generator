@@ -47,6 +47,33 @@ export class RepositoryService {
     );
   }
 
+  getCountOfPrivateRepositories(filter = ''): Observable<number> {
+    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/private/count', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      },
+      params: new HttpParams()
+              .set('filter', filter)
+    })
+    .pipe(
+      map(res => res.count)
+    );
+  }
+
+  findPrivateRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
+    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/private/available', {
+      params: new HttpParams()
+            .set('filter', filter)
+            .set('page', page.toString())
+            .set('take', pageSize.toString()),
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    }).pipe(
+      map(repos => repos.map(value => { return { id: value.id, name: `${value.user.nick}/${value.name}`, type: value.type } as Repository }))
+    );
+  }
+
   findUserRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
     return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/user-repositories', {
       params: new HttpParams()

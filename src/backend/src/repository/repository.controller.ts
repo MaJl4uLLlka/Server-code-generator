@@ -67,6 +67,18 @@ export class RepositoryController {
     );
   }
 
+  @Get('private/count')
+  async getPrivateRepositoriesCount(
+    @Req() req: any,
+    @Query() repositoryFilter: RepositoryFilter,
+  ) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getCountOfPrivateRepositories(
+      user.id,
+      repositoryFilter.filter,
+    );
+  }
+
   @Get(':id')
   async findOne(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
@@ -107,14 +119,10 @@ export class RepositoryController {
     return await this.repositoryService.remove(id, user.id);
   }
 
-  @Get('private')
-  async findAllPrivate(@Query() query: RepositoryQuery) {
-    return await this.repositoryService.findAllPublicRepositories(query);
-  }
-
-  @Get('private/count')
-  async getPrivateRepositoriesCount() {
-    return 1;
+  @Get('private/available')
+  async findAllPrivate(@Req() req: any, @Query() query: RepositoryQuery) {
+    const user = req['user'] as User;
+    return await this.repositoryService.findAllPrivateAvilable(user.id, query);
   }
 
   // @Get(':id/fill')

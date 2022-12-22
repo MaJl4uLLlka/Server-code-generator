@@ -227,28 +227,159 @@ export class RepositoryService {
   }
 
   async findAllPrivateAvilable(userId: string, query: RepositoryQuery) {
+    const skip = +query.page * +query.take;
     const count = await this.prismaService.privateRepositoryAccess.count({
       where: {
         userId: userId,
+        repository: {
+          name: {
+            contains: query.filter,
+            mode: 'insensitive',
+          },
+        },
       },
     });
 
-    const repos: any[] = [];
+    const repositories = [];
 
-    if (count >= +query.page * +query.take + query.take) {
-      repos.push(
-        (
-          await this.prismaService.privateRepositoryAccess.findMany({
-            where: {
-              userId: userId,
+    const difference = skip - count;
+
+    if (difference < 0 && Math.abs(difference) >= +query.take && count !== 0) {
+      const privateRepositoriesWithAccess =
+        await this.prismaService.privateRepositoryAccess.findMany({
+          where: {
+            userId: userId,
+            repository: {
+              name: {
+                contains: query.filter,
+                mode: 'insensitive',
+              },
             },
-            include: {
-              repository: true,
+          },
+          take: +query.take,
+          skip: skip,
+          include: {
+            repository: {
+              include: {
+                user: {
+                  select: {
+                    nick: true,
+                  },
+                },
+              },
             },
-          })
-        ).map((element) => element.repository),
+          },
+        });
+
+      repositories.push(
+        ...privateRepositoriesWithAccess.map((element) => element.repository),
       );
+    } else if (difference < 0 && Math.abs(difference) < +query.take) {
+      const needToTakeFromSecond = query.take - Math.abs(difference);
+
+      const privateRepositoriesWithAccess =
+        await this.prismaService.privateRepositoryAccess.findMany({
+          where: {
+            userId: userId,
+            repository: {
+              name: {
+                contains: query.filter,
+                mode: 'insensitive',
+              },
+            },
+          },
+          take: Math.abs(difference),
+          skip: +query.page * +query.take,
+          include: {
+            repository: {
+              include: {
+                user: {
+                  select: {
+                    nick: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      const userPrivateRepositories =
+        await this.prismaService.repository.findMany({
+          where: {
+            userId: userId,
+            type: RepositoryType.PRIVATE,
+            name: {
+              contains: query.filter,
+              mode: 'insensitive',
+            },
+          },
+          take: needToTakeFromSecond,
+          include: {
+            user: {
+              select: {
+                nick: true,
+              },
+            },
+          },
+        });
+
+      repositories.push(
+        ...privateRepositoriesWithAccess.map((element) => element.repository),
+      );
+
+      repositories.push(...userPrivateRepositories);
+    } else if (difference >= 0) {
+      const privateRepositories = await this.prismaService.repository.findMany({
+        where: {
+          userId: userId,
+          type: RepositoryType.PRIVATE,
+          name: {
+            contains: query.filter,
+            mode: 'insensitive',
+          },
+        },
+        skip: difference,
+        take: +query.take,
+        include: {
+          user: {
+            select: {
+              nick: true,
+            },
+          },
+        },
+      });
+
+      repositories.push(...privateRepositories);
     }
+
+    return repositories;
+  }
+
+  async getCountOfPrivateRepositories(userId: string, filter = '') {
+    let count = await this.prismaService.privateRepositoryAccess.count({
+      where: {
+        userId: userId,
+        repository: {
+          name: {
+            contains: filter,
+            mode: 'insensitive',
+          },
+        },
+      },
+    });
+
+    count += await this.prismaService.repository.count({
+      where: {
+        userId: userId,
+        type: RepositoryType.PRIVATE,
+        name: {
+          contains: filter,
+          mode: 'insensitive',
+        },
+      },
+    });
+
+    return { count: count };
   }
 
   async fillTemplates(repositoryId: string, userId: string = null) {
