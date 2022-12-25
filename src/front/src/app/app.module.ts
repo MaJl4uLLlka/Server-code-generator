@@ -37,6 +37,8 @@ import { DeleteRepositoryComponent } from './components/repository/delete-reposi
 import { UpdateRepositoryComponent } from './components/repository/update-repository/update-repository.component';
 import { ShareRepositoryComponent } from './components/repository/share-repository/share-repository.component';
 import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -81,6 +83,8 @@ import { UpdateTemplatesComponent } from './components/repository/update-templat
     MatButtonToggleModule,
     MatSelectModule,
     MatMenuModule,
+    MatStepperModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

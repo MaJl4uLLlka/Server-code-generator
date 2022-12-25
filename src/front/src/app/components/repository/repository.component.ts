@@ -11,7 +11,7 @@ export class RepositoryComponent implements OnInit {
   id: string;
   isPrivate: boolean;
   isUserOwner: boolean;
-  jsonSchema: string = '{}';
+  jsonSchema: string = '{"controller": "User", "service": "User", entity: "User"}';
   controllerTemplate: string = '(empty)';
   serviceTemplate: string =  '(empty)';
   entityTemplate: string =  '(empty)';

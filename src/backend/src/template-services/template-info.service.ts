@@ -93,7 +93,7 @@ export class TemplateInfoService {
     controllerTemplateData: TemplateDto,
   ) {
     const template = await this.getTemplateById(templateId);
-    const updated = await this.serviceTemplateService.update(
+    const updated = await this.controllerTemplateService.update(
       template.controllerTemplate.id,
       controllerTemplateData,
     );

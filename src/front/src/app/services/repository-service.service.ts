@@ -143,4 +143,17 @@ export class RepositoryService {
       }
     });
   }
+
+  updateRepositoryTemplate(
+    repositoryId: string, 
+    templateData: {entityTemplate: string, serviceTemplate: string, controllerTemplate: string}
+  ) {
+    return this.http.put(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/template', templateData,
+      {
+        headers: {
+          'app-auth': `${localStorage.getItem('token')}`,
+        }
+      }
+    );
+  }
 }

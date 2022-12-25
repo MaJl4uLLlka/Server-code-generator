@@ -15,6 +15,7 @@ import { CreateRepositoryDto } from './dto/create-repository.dto';
 import {
   UpdateRepositoryNameDto,
   ShareRepositoryDto,
+  UpdateTemplateDto,
 } from './dto/update-repository.dto';
 import { RepositoryQuery, RepositoryFilter } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
@@ -135,6 +136,20 @@ export class RepositoryController {
   async isUserRepositoryOwner(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
     return await this.repositoryService.isUserRepositoryOwner(id, user.id);
+  }
+
+  @Put(':id/template')
+  async updateRepositoryTemplate(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() templateData: UpdateTemplateDto,
+  ) {
+    const user = req['user'] as User;
+    return await this.repositoryService.updateTemplate(
+      id,
+      user.id,
+      templateData,
+    );
   }
 
   // @Get(':id/fill')

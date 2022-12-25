@@ -4,7 +4,7 @@
         <mat-form-field>
             <mat-label>Card Number</mat-label>
             <input matInput formControlName="number" type="text"/>
-            <mat-error *ngIf="exp_month?.errors?.['incorrect']">Card number incorrect</mat-error>
+            <mat-error *ngIf="number?.errors?.['incorrect']">Card number incorrect</mat-error>
         </mat-form-field>
         <div class="card-expire-date">
             <mat-form-field class="expire-date-field">
@@ -17,14 +17,14 @@
             <mat-form-field class="expire-date-field">
                 <mat-label>Year</mat-label>
                 <input matInput formControlName="exp_year" type="text"/>
-                <mat-error *ngIf="exp_month?.errors?.['incorrect']">Year incorrect</mat-error>
+                <mat-error *ngIf="exp_year?.errors?.['incorrect']">Year incorrect</mat-error>
             </mat-form-field>
 
             <div class="spacer"></div>
             <mat-form-field class="expire-date-field">
-                <mat-label>CVV</mat-label>
+                <mat-label>CVС</mat-label>
                 <input matInput formControlName="cvc" type="text"/>
-                <mat-error *ngIf="exp_month?.errors?.['incorrect']">Cvc incorrect</mat-error>
+                <mat-error *ngIf="cvc?.errors?.['incorrect']">Cvc incorrect</mat-error>
             </mat-form-field>
         </div>
         <div class="center margin-top">

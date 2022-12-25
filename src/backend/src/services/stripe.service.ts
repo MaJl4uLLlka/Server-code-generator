@@ -45,4 +45,14 @@ export class StripeService implements OnModuleInit {
 
     return subscription;
   }
+
+  async getSubscription(customerId: string) {
+    const subscriptionList = await this.stripe.subscriptions.list({
+      customer: customerId,
+      limit: 1,
+      status: 'active',
+    });
+
+    return subscriptionList.data;
+  }
 }

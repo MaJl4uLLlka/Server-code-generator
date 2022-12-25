@@ -4,7 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import {
+  UpdateRepositoryNameDto,
+  UpdateTemplateDto,
+} from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { User } from '@prisma/client';
@@ -412,5 +415,34 @@ export class RepositoryService {
     const isUserOwner = userId === repository.userId ? true : false;
 
     return { isUserOwner: isUserOwner };
+  }
+
+  async updateTemplate(
+    repositoryId: string,
+    userId: string,
+    templateData: UpdateTemplateDto,
+  ) {
+    const repository = await this.findOne(repositoryId, userId);
+
+    if (templateData.entityTemplate) {
+      await this.templateService.updateEntityTemplate(repository.templateId, {
+        value: templateData.entityTemplate,
+      });
+    }
+
+    if (templateData.serviceTemplate) {
+      await this.templateService.updateServiceTemplate(repository.templateId, {
+        value: templateData.serviceTemplate,
+      });
+    }
+
+    if (templateData.controllerTemplate) {
+      await this.templateService.updateControllerTemplate(
+        repository.templateId,
+        { value: templateData.controllerTemplate },
+      );
+    }
+
+    return await this.findOne(repositoryId, userId);
   }
 }

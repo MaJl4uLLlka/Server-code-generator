@@ -21,10 +21,4 @@ export class SubscriptionController {
     const user = req['user'] as User;
     return this.subscriptionService.create(user, cardData);
   }
-
-  // @Get()
-  // async getUserSubscription(@Req() req: any) {
-  //   const user = req['user'] as User;
-
-  // }
 }

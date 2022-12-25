@@ -11,3 +11,17 @@ export class ShareRepositoryDto {
   @IsString()
   nick: string;
 }
+
+export class UpdateTemplateDto {
+  @IsOptional()
+  @IsString()
+  entityTemplate: string;
+
+  @IsOptional()
+  @IsString()
+  serviceTemplate: string;
+
+  @IsOptional()
+  @IsString()
+  controllerTemplate: string;
+}

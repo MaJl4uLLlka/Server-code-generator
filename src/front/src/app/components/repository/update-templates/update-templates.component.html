@@ -1,1 +1,55 @@
-<p>update-templates works!</p>
+
+  <mat-stepper [linear]="false" #stepper>
+    <mat-step label="Use next keywords">
+      <h1 class="form-label">Keywords: controller, service, entity</h1>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+    <mat-step [stepControl]="entityFormGroup" class="template-form-container">
+      <form [formGroup]="entityFormGroup" class="template-form">
+        <ng-template matStepLabel>Fill out your entity template</ng-template>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Entity template</mat-label>
+          <textarea matInput formControlName="entityTemplate"></textarea>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="serviceFormGroup" label="Fill out your service template" class="template-form-container">
+      <form [formGroup]="serviceFormGroup" class="template-form">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Service template</mat-label>
+          <textarea matInput formControlName="serviceTemplate"></textarea>
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="controllerFormGroup" label="Fill out your contolller template" class="template-form-container">
+        <form [formGroup]="controllerFormGroup" class="template-form">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Controller template</mat-label>
+            <textarea matInput formControlName="controllerTemplate"></textarea>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="stepper.reset()">Reset</button>
+        <button mat-button color="primary" (click)="OnSubmit()">Update</button>
+      </div>
+    </mat-step>
+  </mat-stepper>
+  

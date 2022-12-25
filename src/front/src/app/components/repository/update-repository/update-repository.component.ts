@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from 'src/app/services/repository-service.service';
@@ -8,7 +8,7 @@ import { RepositoryService } from 'src/app/services/repository-service.service';
   templateUrl: './update-repository.component.html',
   styleUrls: ['./update-repository.component.css']
 })
-export class UpdateRepositoryComponent {
+export class UpdateRepositoryComponent implements OnInit {
   id: string;
   repositoryForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)])
