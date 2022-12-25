@@ -3,6 +3,7 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
 import { CardData, StripeService } from '../services/stripe.service';
 import { PrismaService } from '../services/prisma.service';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class SubscriptionService {
@@ -11,14 +12,12 @@ export class SubscriptionService {
     private stripeService: StripeService,
   ) {}
 
-  async create(userId: string, cardData: CardData) {
-    const subscription = await this.prismaService.subscription.create({
-      data: {},
-    });
+  async create(user: User, cardData: CardData) {
+    const card = await this.stripeService.createCard(user.id, cardData);
   }
 
   async getSubscription() {
-    return `This action returns a #${id} subscription`;
+    return 1;
   }
 
   async update(id: number, updateSubscriptionDto: UpdateSubscriptionDto) {

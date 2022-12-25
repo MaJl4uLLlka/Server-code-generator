@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cardNumber, monthValue, yearValue, cvcValue } from '../../../validators';
+import { SubscriptionService } from '../../../services/subscription.service';
 
 @Component({
   selector: 'app-subscription',
@@ -33,7 +34,7 @@ export class SubscriptionComponent {
 
   OnSubmit() {
     if (this.cardForm.valid) {
-      console.log(this.cardForm.value);
+      
     }
   }
 }

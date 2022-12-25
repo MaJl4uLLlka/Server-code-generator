@@ -40,6 +40,8 @@ export class AppModule implements NestModule {
         path: 'repositories/user-repositories/count',
         method: RequestMethod.GET,
       },
+      { path: 'repositories/is-private/:id', method: RequestMethod.GET },
+      { path: 'repositories/is-user-owner/:id', method: RequestMethod.GET },
       { path: 'repositories/:id', method: RequestMethod.GET },
       { path: 'repositories/:id', method: RequestMethod.PUT },
       { path: 'repositories/:id', method: RequestMethod.DELETE },

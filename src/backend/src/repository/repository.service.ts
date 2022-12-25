@@ -397,4 +397,20 @@ export class RepositoryService {
 
     result.value = {};
   }
+
+  async isRepositoryPrivate(repositoryId: string, userId: string) {
+    const repository = await this.findOne(repositoryId, userId);
+
+    const isPrivate = repository.type === RepositoryType.PRIVATE ? true : false;
+
+    return { isPrivate: isPrivate };
+  }
+
+  async isUserRepositoryOwner(repositoryId: string, userId: string) {
+    const repository = await this.findOne(repositoryId, userId);
+
+    const isUserOwner = userId === repository.userId ? true : false;
+
+    return { isUserOwner: isUserOwner };
+  }
 }

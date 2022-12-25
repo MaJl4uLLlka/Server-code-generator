@@ -127,4 +127,20 @@ export class RepositoryService {
       }
     });
   }
+
+  isRepositoryPrivate(repositoryId: string) {
+    return this.http.get<{isPrivate: boolean}>(APPLICATION_DOMAIN + '/repositories/is-private/' + repositoryId, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  isUserRepositoryOwner(repositoryId: string) {
+    return this.http.get<{isUserOwner: boolean}>(APPLICATION_DOMAIN + '/repositories/is-user-owner/' + repositoryId, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
 }

@@ -19,7 +19,7 @@ export class SubscriptionController {
   @Post()
   async create(@Req() req: any, @Body() cardData: CardData) {
     const user = req['user'] as User;
-    return this.subscriptionService.create(user.id, cardData);
+    return this.subscriptionService.create(user, cardData);
   }
 
   // @Get()

@@ -32,7 +32,7 @@ export class StripeService implements OnModuleInit {
       },
     });
 
-    await this.stripe.customers.createSource(customerId, {
+    return await this.stripe.customers.createSource(customerId, {
       source: token.id,
     });
   }

@@ -125,6 +125,18 @@ export class RepositoryController {
     return await this.repositoryService.findAllPrivateAvilable(user.id, query);
   }
 
+  @Get('is-private/:id')
+  async isRepositoryPrivate(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.isRepositoryPrivate(id, user.id);
+  }
+
+  @Get('is-user-owner/:id')
+  async isUserRepositoryOwner(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.isUserRepositoryOwner(id, user.id);
+  }
+
   // @Get(':id/fill')
   // async getPreparedCode(@Res() res) {
   //   return await this.repositoryService.
