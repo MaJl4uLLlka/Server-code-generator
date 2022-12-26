@@ -86,6 +86,16 @@ export class UserService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
 
+    const userWithThisNickame = await this.prismaService.user.findUnique({
+      where: {
+        nick: updateUserDto.nick,
+      },
+    });
+
+    if (userWithThisNickame) {
+      throw new BadRequestException('User with this nickname exists');
+    }
+
     return this.prismaService.user.update({
       where: {
         id: user.id,
