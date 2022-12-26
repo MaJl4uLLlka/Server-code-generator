@@ -3,18 +3,18 @@
     <form [formGroup] = "signUpForm" (ngSubmit)="OnSubmit()">
         <mat-form-field>
             <mat-label>Nickname</mat-label>
-            <input matInput formControlName="nick" type="text"/>
+            <input matInput formControlName="nick" type="text" maxlength="15"/>
             <mat-error *ngIf="nick?.errors?.['required']">Nickname is required</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="text"/>
+            <input matInput formControlName="email" type="text" maxlength="20"/>
             <mat-error *ngIf="email?.errors?.['required']">Email is required</mat-error>
             <mat-error *ngIf="email?.errors?.['email']">Invalid email format</mat-error>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Password</mat-label>
-            <input matInput formControlName="password" type="password"/>
+            <input matInput formControlName="password" type="password" maxlength="20"/>
             <mat-error *ngIf="password?.errors?.['required']">Password is required</mat-error>
         </mat-form-field>
         <div class="center margin-top">

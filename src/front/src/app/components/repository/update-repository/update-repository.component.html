@@ -3,7 +3,7 @@
     <form [formGroup] = "repositoryForm" (ngSubmit)="OnSubmit()">
         <mat-form-field>
             <mat-label>Repository name</mat-label>
-            <input matInput formControlName="name" type="text"/>
+            <input matInput formControlName="name" type="text" maxlength="15"/>
             <mat-error *ngIf="repoName?.errors?.['required']">Repository name is required</mat-error>
         </mat-form-field>
         <div class="center margin-top">
