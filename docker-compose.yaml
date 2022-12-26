@@ -57,6 +57,8 @@ services:
     build:
       dockerfile: ./images/front/Dockerfile
       context: .
+    volumes:
+      - "./src/front/dist/front:/usr/share/nginx/html/"
     ports:
       - "4200:80"
     networks:
