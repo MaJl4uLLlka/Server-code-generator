@@ -1,4 +1,5 @@
-<div class="form-container">
+<h1 class="white-color" *ngIf="hasSubscription">User has now an active subscription</h1>
+<div class="form-container" *ngIf="!hasSubscription">
     <h1>Subscribe for 4.99$ per month</h1>
     <form [formGroup]="cardForm" (ngSubmit)="OnSubmit()">
         <mat-form-field>

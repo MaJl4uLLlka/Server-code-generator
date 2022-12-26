@@ -23,4 +23,12 @@ export class SubscriptionService {
       }
     });
   }
+
+  getSubscription() {
+    return this.http.get(APPLICATION_DOMAIN + '/subscription', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    })
+  }
 }

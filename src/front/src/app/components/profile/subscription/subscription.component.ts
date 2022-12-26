@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cardNumber, monthValue, yearValue, cvcValue } from '../../../validators';
 import { SubscriptionService } from '../../../services/subscription.service';
@@ -10,7 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './subscription.component.html',
   styleUrls: ['./subscription.component.css']
 })
-export class SubscriptionComponent {
+export class SubscriptionComponent implements OnInit {
+  hasSubscription = false;
   cardForm = new FormGroup({
     number: new FormControl('', [Validators.required, cardNumber()]),
     exp_month:  new FormControl('', [Validators.required, monthValue()]),
@@ -19,6 +20,13 @@ export class SubscriptionComponent {
   });
 
   constructor(private subscriptionService: SubscriptionService, private router: Router, private snackBar: MatSnackBar) {}
+  
+  ngOnInit(): void {
+    this.subscriptionService.getSubscription()
+      .subscribe(
+        data => { this.hasSubscription = true },
+      );
+  }
 
   get number() {
     return this.cardForm.get('number');
@@ -41,7 +49,7 @@ export class SubscriptionComponent {
       this.subscriptionService.subscribe(this.cardForm.value as any)
         .subscribe(
           data => {
-            this.router.navigate(['profile']);
+            this.router.navigate(['info']);
           },
           err => {
             this.snackBar.open(err.error.message, undefined, { duration: 2500 });
