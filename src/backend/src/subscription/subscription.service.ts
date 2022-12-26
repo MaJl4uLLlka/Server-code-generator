@@ -14,19 +14,23 @@ export class SubscriptionService {
   ) {}
 
   async create(user: User, cardData: CardData) {
-    await this.stripeService.createCard(user.id, cardData);
-    const stripeSubscription = await this.stripeService.createSubscription(
-      user.stripeAccountId,
-    );
+    try {
+      await this.stripeService.createCard(user.stripeAccountId, cardData);
+      const stripeSubscription = await this.stripeService.createSubscription(
+        user.stripeAccountId,
+      );
 
-    const subscription = await this.prismaService.subscription.create({
-      data: {
-        userId: user.id,
-        stripeSubsctiptionId: stripeSubscription.id,
-      },
-    });
+      const subscription = await this.prismaService.subscription.create({
+        data: {
+          userId: user.id,
+          stripeSubsctiptionId: stripeSubscription.id,
+        },
+      });
 
-    return subscription;
+      return subscription;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   async getSubscription(customerId: string) {

@@ -50,6 +50,8 @@ export class AppModule implements NestModule {
       { path: 'repositories/private/available', method: RequestMethod.GET },
       { path: 'repositories/private/count', method: RequestMethod.GET },
       { path: 'repositories/:id/share', method: RequestMethod.POST },
+      { path: 'subscription', method: RequestMethod.POST },
+      { path: 'subscription', method: RequestMethod.GET },
     );
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cardNumber, monthValue, yearValue, cvcValue } from '../../../validators';
 import { SubscriptionService } from '../../../services/subscription.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-subscription',
@@ -15,6 +16,8 @@ export class SubscriptionComponent {
     exp_year:   new FormControl('', [Validators.required, yearValue()]),
     cvc:    new FormControl('', [Validators.required, cvcValue()]),
   });
+
+  constructor(private subscriptionService: SubscriptionService, private router: Router) {}
 
   get number() {
     return this.cardForm.get('number');
@@ -34,7 +37,12 @@ export class SubscriptionComponent {
 
   OnSubmit() {
     if (this.cardForm.valid) {
-      
+      this.subscriptionService.subscribe(this.cardForm.value as any)
+        .subscribe(
+          data => {
+            this.router.navigate(['profile']);
+          }
+        );
     }
   }
 }
