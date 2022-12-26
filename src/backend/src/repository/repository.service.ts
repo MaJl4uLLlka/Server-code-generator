@@ -12,6 +12,7 @@ import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { User } from '@prisma/client';
 import { TemplateInfoService } from '../template-services/template-info.service';
+import { fillPlaceholders } from '../utils/placeholder';
 
 export enum RepositoryType {
   PRIVATE = 'PRIVATE',
@@ -20,6 +21,12 @@ export enum RepositoryType {
 
 @Injectable()
 export class RepositoryService {
+  readonly templateData = {
+    entity: 'User',
+    service: 'User',
+    controller: 'User',
+  };
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly templateService: TemplateInfoService,
@@ -385,24 +392,12 @@ export class RepositoryService {
     return { count: count };
   }
 
-  async fillTemplates(repositoryId: string, userId: string = null) {
-    const result: any = {};
+  async isRepositoryPrivate(repositoryId: string, userId: string) {
     const repository = await this.prismaService.repository.findUnique({
       where: {
         id: repositoryId,
       },
     });
-
-    if (!userId && repository.type === RepositoryType.PRIVATE) {
-      result.needRedirect = true;
-      return result;
-    }
-
-    result.value = {};
-  }
-
-  async isRepositoryPrivate(repositoryId: string, userId: string) {
-    const repository = await this.findOne(repositoryId, userId);
 
     const isPrivate = repository.type === RepositoryType.PRIVATE ? true : false;
 
@@ -410,9 +405,13 @@ export class RepositoryService {
   }
 
   async isUserRepositoryOwner(repositoryId: string, userId: string) {
-    const repository = await this.findOne(repositoryId, userId);
+    let isUserOwner = true;
 
-    const isUserOwner = userId === repository.userId ? true : false;
+    try {
+      await this.findOne(repositoryId, userId);
+    } catch (error) {
+      isUserOwner = false;
+    }
 
     return { isUserOwner: isUserOwner };
   }
@@ -444,5 +443,108 @@ export class RepositoryService {
     }
 
     return await this.findOne(repositoryId, userId);
+  }
+
+  async findPublic(id: string) {
+    const repository = await this.prismaService.repository.findFirst({
+      where: {
+        id: id,
+        type: RepositoryType.PUBLIC,
+      },
+      include: {
+        template: {
+          include: {
+            entityTemplate: true,
+            serviceTemplate: true,
+            controllerTemplate: true,
+          },
+        },
+      },
+    });
+
+    if (!repository) {
+      throw new NotFoundException('Repository not exists');
+    }
+
+    return repository;
+  }
+
+  async fillPublicTemplate(repositoryId: string) {
+    const { template } = await this.findPublic(repositoryId);
+
+    return await this.fillTemplate(template);
+  }
+
+  async fillTemplate(template: any) {
+    const entityTemplate = fillPlaceholders(
+      template.entityTemplate.value,
+      this.templateData,
+    );
+
+    const serviceTemplate = fillPlaceholders(
+      template.serviceTemplate.value,
+      this.templateData,
+    );
+
+    const controllerTemplate = fillPlaceholders(
+      template.controllerTemplate.value,
+      this.templateData,
+    );
+
+    return {
+      entityTemplate: entityTemplate,
+      serviceTemplate: serviceTemplate,
+      controllerTemplate: controllerTemplate,
+    };
+  }
+
+  async fillPrivateTemplate(repositoryId: string, userId: string) {
+    let privateRepository = await this.prismaService.repository.findFirst({
+      where: {
+        id: repositoryId,
+        userId: userId,
+        type: RepositoryType.PRIVATE,
+      },
+      include: {
+        template: {
+          include: {
+            entityTemplate: true,
+            serviceTemplate: true,
+            controllerTemplate: true,
+          },
+        },
+      },
+    });
+
+    if (!privateRepository) {
+      const { repository } =
+        await this.prismaService.privateRepositoryAccess.findFirst({
+          where: {
+            userId: userId,
+            repositoryId: repositoryId,
+          },
+          include: {
+            repository: {
+              include: {
+                template: {
+                  include: {
+                    entityTemplate: true,
+                    serviceTemplate: true,
+                    controllerTemplate: true,
+                  },
+                },
+              },
+            },
+          },
+        });
+
+      privateRepository = repository;
+    }
+
+    if (!privateRepository) {
+      throw new NotFoundException('Repository not found');
+    }
+
+    return await this.fillTemplate(privateRepository.template);
   }
 }

@@ -152,8 +152,14 @@ export class RepositoryController {
     );
   }
 
-  // @Get(':id/fill')
-  // async getPreparedCode(@Res() res) {
-  //   return await this.repositoryService.
-  // }
+  @Get(':id/fill-public')
+  async fillPublicRepository(@Param('id') id: string) {
+    return await this.repositoryService.fillPublicTemplate(id);
+  }
+
+  @Get(':id/fill-private')
+  async fillPrivateRepository(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.fillPrivateTemplate(id, user.id);
+  }
 }

@@ -156,4 +156,16 @@ export class RepositoryService {
       }
     );
   }
+
+  getCompletedPublicTemplate(repositoryId: string) {
+    return this.http.get(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/fill-public');
+  }
+
+  getCompletedPrivateTemplate(repositoryId: string) {
+    return this.http.get(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/fill-private', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
 }
