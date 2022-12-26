@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { cardNumber, monthValue, yearValue, cvcValue } from '../../../validators';
 import { SubscriptionService } from '../../../services/subscription.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-subscription',
@@ -17,7 +18,7 @@ export class SubscriptionComponent {
     cvc:    new FormControl('', [Validators.required, cvcValue()]),
   });
 
-  constructor(private subscriptionService: SubscriptionService, private router: Router) {}
+  constructor(private subscriptionService: SubscriptionService, private router: Router, private snackBar: MatSnackBar) {}
 
   get number() {
     return this.cardForm.get('number');
@@ -41,6 +42,9 @@ export class SubscriptionComponent {
         .subscribe(
           data => {
             this.router.navigate(['profile']);
+          },
+          err => {
+            this.snackBar.open(err.error.message, undefined, { duration: 2500 });
           }
         );
     }

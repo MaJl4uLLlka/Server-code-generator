@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from 'src/app/services/repository-service.service';
 
@@ -14,7 +15,7 @@ export class UpdateRepositoryComponent implements OnInit {
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)])
   });
 
-  constructor(private repositoryService: RepositoryService, private activatedRoute: ActivatedRoute, private router: Router){
+  constructor(private repositoryService: RepositoryService, private activatedRoute: ActivatedRoute, private router: Router, private snackBar: MatSnackBar){
     this.id = this.activatedRoute.snapshot.params['repositoryId'];
   }
 
@@ -41,7 +42,8 @@ export class UpdateRepositoryComponent implements OnInit {
       .subscribe(
         data => {
           this.router.navigate(['repositories'])
-        }
+        },
+        err => this.snackBar.open(err.error.message, undefined, { duration: 2500 })
       )
     }
   }

@@ -32,7 +32,8 @@ export class CreateRepositoryComponent {
     if (this.repositoryForm.valid) {
       this.repositoryService.createRepository(this.repositoryForm.value as any)
       .subscribe(
-        data => { this.router.navigate(['repositories'])}
+        data => { this.router.navigate(['repositories'])},
+        err => this.snackBar.open(err.error.message, undefined, { duration: 2500 })
       )
     }
   }

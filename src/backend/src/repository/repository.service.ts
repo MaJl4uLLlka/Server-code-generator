@@ -234,6 +234,10 @@ export class RepositoryService {
       },
     });
 
+    if (!user) {
+      throw new NotFoundException('User with this nick not exists');
+    }
+
     if (user.id === ownerId) {
       throw new BadRequestException('You are owner of this repository');
     }

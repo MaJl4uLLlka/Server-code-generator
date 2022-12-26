@@ -15,7 +15,7 @@ export class ProfileSettingsComponent implements OnInit {
     nick: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)])
   });
 
-  constructor(private profileService: ProfileServiceService){}
+  constructor(private profileService: ProfileServiceService, private snackBar: MatSnackBar){}
 
   get nick() {
     return this.userInfoForm.get('nick');
@@ -38,8 +38,10 @@ export class ProfileSettingsComponent implements OnInit {
     if (this.userInfoForm.valid) {
       this.profileService.updateNickname(this.userInfoForm.value as any)
       .subscribe(
-        data => 
-        this.nickname = (data as any).nick
+        data => {
+          this.nickname = (data as any).nick
+        },
+        err => this.snackBar.open(err.error.message, undefined, { duration: 2500 })
       )
     }
   }
