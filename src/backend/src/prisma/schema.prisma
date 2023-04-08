@@ -11,6 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum LinkType {
+  None
+  OneToOne
+  OneToMany
+  ManyToMany
+}
+
 model User {
   id              String @id @default(uuid())
   email           String @unique
@@ -19,52 +26,74 @@ model User {
   stripeAccountId String?
   repositories    Repository[]
   subscriptions   Subscription[]
-  privateRepositoryAccess PrivateRepositoryAccess[]
-}
-
-enum RepositoryType {
-  PRIVATE
-  PUBLIC
 }
 
 model Repository {
   id         String         @id @default(uuid())
   name       String
-  type       RepositoryType @default(PUBLIC)
-  template   TemplateInfo   @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  templateId String         @unique
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  privateRepositoryAccess  PrivateRepositoryAccess[]
+  entities   Entity[]
+  services   Service[]
+  controllers Controller[]
+  config Config?            
 }
 
-model TemplateInfo {
-  id                   String @id @default(uuid())
-  repository           Repository?
-  entityTemplate       EntityTemplate @relation(fields: [entityTemplateId], references: [id], onDelete: Cascade)
-  entityTemplateId     String @unique
-  serviceTemplate      ServiceTemplate @relation(fields: [serviceTemplateId], references: [id], onDelete: Cascade)
-  serviceTemplateId    String @unique
-  controllerTemplate   ControllerTemplate @relation(fields: [controllerTemplateId], references: [id], onDelete: Cascade)
-  controllerTemplateId String @unique
+model Entity {
+  id String                 @id @default(uuid())
+  name String
+  repository Repository     @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repositoryId String
+  schema Json
+  fromLinks Link[]          @relation("from")
+  toLinks   Link[]          @relation("to")
+  usedInServices  EntitiesOnServices[]
 }
 
-model EntityTemplate {
-  id       String @id @default(uuid())
-  template TemplateInfo?
-  value    String?
+model EntitiesOnServices {
+  entity Entity @relation(fields: [entityId], references: [id])
+  entityId String
+  service Service @relation(fields: [serviceId], references: [id])
+  serviceId String
+
+  @@id([entityId, serviceId])
 }
 
-model ServiceTemplate {
-  id       String @id @default(uuid())
-  template TemplateInfo?
-  value    String?
+
+model Link {
+  id String @id @default(uuid())
+  fromEntity Entity @relation("from", fields: [fromEntityId], references: [id], onDelete: Cascade)
+  fromEntityId String
+  toEntity Entity @relation("to", fields: [toEntityId], references: [id], onDelete: Cascade)
+  toEntityId   String
+  linkType     LinkType @default(None)
 }
 
-model ControllerTemplate {
-  id        String @id @default(uuid())
-  template TemplateInfo?
-  value     String?
+model Service {
+  id String @id @default(uuid())
+  name String
+  prefix String
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repositoryId String
+  entities EntitiesOnServices[]
+  usedInControllers ServicesOnControllers[]
+}
+
+model Controller {
+  id String @id @default(uuid())
+  name String
+  repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repositoryId String
+  services ServicesOnControllers[]
+}
+
+model ServicesOnControllers {
+  service Service @relation(fields: [serviceId], references: [id])
+  serviceId String
+  controller Controller @relation(fields: [controllerId], references: [id])
+  controllerId String
+
+  @@id([serviceId, controllerId])
 }
 
 model Subscription {
@@ -74,10 +103,11 @@ model Subscription {
   userId String
 }
 
-model PrivateRepositoryAccess {
+model Config {
   id String @id @default(uuid())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
-  repositoryId String
+  repositoryId String @unique
+  apiPrefix String?
+  port   Int
+  dbConnectionUri String
 }
