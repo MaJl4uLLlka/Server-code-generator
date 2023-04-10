@@ -1,5 +1,27 @@
-import { IsDefined, IsString, IsEnum } from 'class-validator';
-import { RepositoryType } from '../repository.service';
+import {
+  IsDefined,
+  IsString,
+  ValidateNested,
+  IsOptional,
+  IsInt,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateConfigDto {
+  @IsOptional()
+  @IsString()
+  apiPrefix: string;
+
+  @IsDefined()
+  @IsInt()
+  @Min(1024)
+  port: number;
+
+  @IsDefined()
+  @IsString()
+  dbConnectionUri: string;
+}
 
 export class CreateRepositoryDto {
   @IsDefined()
@@ -7,6 +29,7 @@ export class CreateRepositoryDto {
   name: string;
 
   @IsDefined()
-  @IsEnum(RepositoryType)
-  type: RepositoryType;
+  @ValidateNested()
+  @Type(() => CreateConfigDto)
+  config!: CreateConfigDto;
 }

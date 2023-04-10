@@ -1,27 +1,35 @@
-import { IsDefined, IsOptional, IsString } from 'class-validator';
+import {
+  IsDefined,
+  IsInt,
+  IsOptional,
+  IsString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateRepositoryNameDto {
+export class UpdateConfigDto {
   @IsOptional()
   @IsString()
-  name: string;
-}
+  apiPrefix: string;
 
-export class ShareRepositoryDto {
+  @IsDefined()
+  @IsInt()
+  @Min(1024)
+  port: number;
+
   @IsDefined()
   @IsString()
-  nick: string;
+  dbConnectionUri: string;
 }
 
-export class UpdateTemplateDto {
-  @IsOptional()
+export class UpdateRepositoryNameDto {
+  @IsDefined()
   @IsString()
-  entityTemplate: string;
+  name: string;
 
-  @IsOptional()
-  @IsString()
-  serviceTemplate: string;
-
-  @IsOptional()
-  @IsString()
-  controllerTemplate: string;
+  @IsDefined()
+  @ValidateNested()
+  @Type(() => UpdateConfigDto)
+  config!: UpdateConfigDto;
 }

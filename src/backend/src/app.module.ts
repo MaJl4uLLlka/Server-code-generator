@@ -9,7 +9,6 @@ import { UserModule } from './user/user.module';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
-import { ServiceModuleModule } from './template-services/service-module.module';
 import { ServicesModule } from './services/services.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 
@@ -21,7 +20,6 @@ import { SubscriptionModule } from './subscription/subscription.module';
     UserModule,
     AuthModule,
     RepositoryModule,
-    ServiceModuleModule,
     ServicesModule,
     SubscriptionModule,
   ],
@@ -30,28 +28,20 @@ import { SubscriptionModule } from './subscription/subscription.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(
-      { path: 'users', method: RequestMethod.PUT },
-      { path: 'users', method: RequestMethod.GET },
-      { path: 'auth', method: RequestMethod.GET },
-      { path: 'repositories', method: RequestMethod.POST },
-      { path: 'repositories/user-repositories', method: RequestMethod.GET },
-      {
-        path: 'repositories/user-repositories/count',
-        method: RequestMethod.GET,
-      },
-      { path: 'repositories/is-private/:id', method: RequestMethod.GET },
-      { path: 'repositories/is-user-owner/:id', method: RequestMethod.GET },
-      { path: 'repositories/:id', method: RequestMethod.GET },
-      { path: 'repositories/:id', method: RequestMethod.PUT },
-      { path: 'repositories/:id/template', method: RequestMethod.PUT },
-      { path: 'repositories/:id/fill-private', method: RequestMethod.GET },
-      { path: 'repositories/:id', method: RequestMethod.DELETE },
-      { path: 'repositories/private/available', method: RequestMethod.GET },
-      { path: 'repositories/private/count', method: RequestMethod.GET },
-      { path: 'repositories/:id/share', method: RequestMethod.POST },
-      { path: 'subscription', method: RequestMethod.POST },
-      { path: 'subscription', method: RequestMethod.GET },
-    );
+    consumer
+      .apply(AuthMiddleware)
+      .forRoutes(
+        { path: 'users', method: RequestMethod.PUT },
+        { path: 'users', method: RequestMethod.GET },
+        { path: 'auth', method: RequestMethod.GET },
+        { path: 'repositories', method: RequestMethod.POST },
+        { path: 'repositories/user-repositories', method: RequestMethod.GET },
+        { path: 'repositories/is-user-owner/:id', method: RequestMethod.GET },
+        { path: 'repositories/:id', method: RequestMethod.GET },
+        { path: 'repositories/:id', method: RequestMethod.PUT },
+        { path: 'repositories/:id', method: RequestMethod.DELETE },
+        { path: 'subscription', method: RequestMethod.POST },
+        { path: 'subscription', method: RequestMethod.GET },
+      );
   }
 }
