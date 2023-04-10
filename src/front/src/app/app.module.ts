@@ -14,8 +14,6 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { RepositoriesComponent } from './components/repositories/repositories.component';
 import {MatTabsModule} from '@angular/material/tabs';
-import { PublicRepositoriesComponent } from './components/repositories/public-repositories/public-repositories.component';
-import { PrivateRepositoriesComponent } from './components/repositories/private-repositories/private-repositories.component';
 import { UserRepositoriesComponent } from './components/repositories/user-repositories/user-repositories.component';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -47,8 +45,6 @@ import {MatCardModule} from '@angular/material/card';
     SignUpComponent,
     SignInComponent,
     RepositoriesComponent,
-    PublicRepositoriesComponent,
-    PrivateRepositoriesComponent,
     UserRepositoriesComponent,
     ProfileComponent,
     InfoComponent,

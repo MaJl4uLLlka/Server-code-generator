@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import { UpdateRepositoryDto } from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { StripeService } from '../services/stripe.service';
@@ -99,15 +99,20 @@ export class RepositoryService {
       where: {
         AND: [{ id: id }, { userId: userId }],
       },
-      include: {},
+      include: {
+        config: true,
+        entities: true,
+        services: true,
+        controllers: true,
+      },
     });
 
     return repository;
   }
 
-  async updateRepositoryName(
+  async updateRepository(
     id: string,
-    repositoryData: UpdateRepositoryNameDto,
+    repositoryData: UpdateRepositoryDto,
     userId: string,
   ) {
     const repositoriesWithThisName =
@@ -131,6 +136,16 @@ export class RepositoryService {
       },
       data: {
         name: repositoryData.name,
+        config: {
+          update: {
+            dbConnectionUri: repositoryData.config.dbConnectionUri,
+            port: repositoryData.config.port,
+            apiPrefix: repositoryData.config.apiPrefix,
+          },
+        },
+      },
+      include: {
+        config: true,
       },
     });
 

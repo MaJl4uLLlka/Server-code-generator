@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryNameDto } from './dto/update-repository.dto';
+import { UpdateRepositoryDto } from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
 
@@ -44,13 +44,13 @@ export class RepositoryController {
   }
 
   @Put(':id')
-  async updateRepositoryName(
+  async updateRepository(
     @Req() req: any,
     @Param('id') id: string,
-    @Body() updateRepositoryDto: UpdateRepositoryNameDto,
+    @Body() updateRepositoryDto: UpdateRepositoryDto,
   ) {
     const user = req['user'] as User;
-    return await this.repositoryService.updateRepositoryName(
+    return await this.repositoryService.updateRepository(
       id,
       updateRepositoryDto,
       user.id,

@@ -23,7 +23,7 @@ export class UpdateConfigDto {
   dbConnectionUri: string;
 }
 
-export class UpdateRepositoryNameDto {
+export class UpdateRepositoryDto {
   @IsDefined()
   @IsString()
   name: string;
