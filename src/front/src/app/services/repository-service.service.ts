@@ -13,55 +13,8 @@ export class RepositoryService {
 
   constructor(private http: HttpClient) { }
 
-  findPublicRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
-    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/public/all', {
-      params: new HttpParams()
-            .set('filter', filter)
-            .set('page', page.toString())
-            .set('take', pageSize.toString())
-    }).pipe(
-      map(repos => repos.map(value => { return { id: value.id, name: `${value.user.nick}/${value.name}`, type: value.type } as Repository }))
-    );
-  }
-
-  getCountOfPublicRepositories(filter = ''): Observable<number> {
-    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/public/count', {
-      params: new HttpParams()
-              .set('filter', filter)
-    })
-    .pipe(
-      map(res => res.count)
-    );
-  }
-
-  getCountOfUserRepositories(filter = ''): Observable<number> {
-    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/user-repositories/count', {
-      headers: {
-        'app-auth': `${localStorage.getItem('token')}`
-      },
-      params: new HttpParams()
-              .set('filter', filter)
-    })
-    .pipe(
-      map(res => res.count)
-    );
-  }
-
-  getCountOfPrivateRepositories(filter = ''): Observable<number> {
-    return this.http.get<{count: number}>(APPLICATION_DOMAIN + '/repositories/private/count', {
-      headers: {
-        'app-auth': `${localStorage.getItem('token')}`
-      },
-      params: new HttpParams()
-              .set('filter', filter)
-    })
-    .pipe(
-      map(res => res.count)
-    );
-  }
-
-  findPrivateRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
-    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/private/available', {
+  findUserRepositories(filter: string, page: number, pageSize: number) {
+    return this.http.get<RepositoryServerData>(APPLICATION_DOMAIN + '/repositories/user-repositories', {
       params: new HttpParams()
             .set('filter', filter)
             .set('page', page.toString())
@@ -69,26 +22,10 @@ export class RepositoryService {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
       }
-    }).pipe(
-      map(repos => repos.map(value => { return { id: value.id, name: `${value.user.nick}/${value.name}`, type: value.type } as Repository }))
-    );
+    })
   }
 
-  findUserRepositories(filter: string, page: number, pageSize: number): Observable<Repository[]> {
-    return this.http.get<RepositoryServerData[]>(APPLICATION_DOMAIN + '/repositories/user-repositories', {
-      params: new HttpParams()
-            .set('filter', filter)
-            .set('page', page.toString())
-            .set('take', pageSize.toString()),
-      headers: {
-        'app-auth': `${localStorage.getItem('token')}`
-      }
-    }).pipe(
-      map(repos => repos.map(value => { return { id: value.id, name: `${value.user.nick}/${value.name}`, type: value.type } as Repository }))
-    );
-  }
-
-  createRepository(repositoryData: { name: string, type: string }) {
+  createRepository(repositoryData: { name: string, config: any }) {
     return this.http.post(APPLICATION_DOMAIN + '/repositories', repositoryData, {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`

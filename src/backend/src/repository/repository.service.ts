@@ -34,7 +34,9 @@ export class RepositoryService {
       data: {
         ...repositoryData,
         user: {
-          connect: user,
+          connect: {
+            id: user.id,
+          },
         },
         config: {
           create: config,
@@ -52,7 +54,7 @@ export class RepositoryService {
     const repositoriesCollection: any = {
       items: [],
       count: 0,
-      page: query.page,
+      page: +query.page,
       pageCount: 0,
     };
 
@@ -100,6 +102,11 @@ export class RepositoryService {
         AND: [{ id: id }, { userId: userId }],
       },
       include: {
+        user: {
+          select: {
+            nick: true,
+          },
+        },
         config: true,
         entities: true,
         services: true,

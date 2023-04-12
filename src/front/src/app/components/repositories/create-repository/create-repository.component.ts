@@ -12,11 +12,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateRepositoryComponent {
   repositoryForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    type: new FormControl('', [Validators.required]),
+    apiPrefix: new FormControl('/api/v1'),
+    port: new FormControl(3000, [Validators.required]),
+    dbConnectionUri: new FormControl('postgresql://localhost:5432/postgres', [Validators.required]),
   });
-  selected = 'PUBLIC'
 
-  constructor(private repositoryService: RepositoryService, private router: Router, private snackBar: MatSnackBar){}
+  constructor(private repositoryService: RepositoryService, private router: Router, private snackBar: MatSnackBar) { }
 
   get name() {
     return this.repositoryForm.get('name');
@@ -26,15 +27,48 @@ export class CreateRepositoryComponent {
     this.repositoryForm.controls.name.setValue(value);
   }
 
-  ngOnInit(): void {}
+  get apiPrefix() {
+    return this.repositoryForm.get('apiPrefix');
+  }
+
+  set apiPrefixSetter(value: string) {
+    this.repositoryForm.controls.apiPrefix.setValue(value);
+  }
+
+  get port() {
+    return this.repositoryForm.get('port');
+  }
+
+  set portSetter(value: number) {
+    this.repositoryForm.controls.port.setValue(value);
+  }
+
+  get dbConnectionUri() {
+    return this.repositoryForm.get('dbConnectionUri');
+  }
+
+  set dbConnectionUriSetter(value: string) {
+    this.repositoryForm.controls.dbConnectionUri.setValue(value);
+  }
+
+  ngOnInit(): void { }
 
   OnSubmit() {
     if (this.repositoryForm.valid) {
-      this.repositoryService.createRepository(this.repositoryForm.value as any)
-      .subscribe(
-        data => { this.router.navigate(['repositories'])},
-        err => this.snackBar.open(err.error.message, undefined, { duration: 2500 })
-      )
+      const { value } = this.repositoryForm;
+      const config = {
+        apiPrefix: value.apiPrefix,
+        port: value.port,
+        dbConnectionUri: value.dbConnectionUri,
+      };
+      this.repositoryService.createRepository({
+        name: value.name as string,
+        config
+      })
+        .subscribe(
+          data => { this.router.navigate(['repositories']) },
+          err => this.snackBar.open(err.error.message, undefined, { duration: 2500 })
+        )
     }
   }
 }

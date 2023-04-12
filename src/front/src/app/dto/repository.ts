@@ -1,16 +1,11 @@
 export class RepositoryServerData {
-    id: string;
-    name: string;
-    type: 'PUBLIC' | 'PRIVATE';
-    userId: string;
-    templateId: string;
-    user: {
-        nick: string;
-    }
+    count: number;
+    page: number;
+    pageCount: number;
+    items: any[]
 }
 
 export class Repository {
     id: string;
     name: string;
-    type: 'PUBLIC' | 'PRIVATE';
 }

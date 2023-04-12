@@ -1,4 +1,4 @@
-<div class="form-container">
+<div class="form-container" #scroll [scrollTop]="scroll.scrollHeight">
     <h1>Repository data</h1>
     <form [formGroup] = "repositoryForm" (ngSubmit)="OnSubmit()">
         <mat-form-field>
@@ -7,12 +7,22 @@
             <mat-error *ngIf="name?.errors?.['required']">Repository name is required</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="fill">
-            <mat-label>Select a repository type</mat-label>
-            <mat-select [(value)]="selected" formControlName="type">
-              <mat-option value="PUBLIC">Public</mat-option>
-              <mat-option value="PRIVATE">Private</mat-option>
-            </mat-select>
+        <h3>Config</h3>
+        <mat-form-field>
+            <mat-label>Api Prefix</mat-label>
+            <input matInput formControlName="apiPrefix" type="text" maxlength="15"/>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Port</mat-label>
+            <input matInput formControlName="port" type="number" min="1024"/>
+            <mat-error *ngIf="port?.errors?.['required']">Port is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Database connection uri</mat-label>
+            <input matInput formControlName="dbConnectionUri" type="string" minlength="5"/>
+            <mat-error *ngIf="dbConnectionUri?.errors?.['required']">Database connection uri is required</mat-error>
         </mat-form-field>
 
         <div class="center margin-top">
