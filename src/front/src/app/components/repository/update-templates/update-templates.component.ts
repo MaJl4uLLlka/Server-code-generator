@@ -29,6 +29,7 @@ export class UpdateTemplatesComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    this.form.addControl('entityName', new FormControl('example', [Validators.required]));
     this.data.forEach((d) => this.addRow(d, false));
     this.updateView();
   }

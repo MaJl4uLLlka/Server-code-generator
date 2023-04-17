@@ -2,6 +2,11 @@
   <mat-stepper [linear]="false" #stepper>
     <mat-step label="Describe entities">
       <form [formGroup]="form">
+        <mat-form-field>
+          <mat-label>Entity name</mat-label>
+          <input matInput type="text" formControlName="entityName">
+          <mat-error *ngIf="form.get('entityName')?.errors?.['required']">Entity name is required</mat-error>
+        </mat-form-field>
 
         <mat-table formArrayName="columns" [dataSource]="dataSource">
           <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
