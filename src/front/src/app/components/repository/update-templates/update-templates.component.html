@@ -1,13 +1,45 @@
 
   <mat-stepper [linear]="false" #stepper>
-    <mat-step label="Use next keywords">
-      <h1 class="form-label">Keywords: controller, service, entity</h1>
+    <mat-step label="Describe entities">
+      <form [formGroup]="form">
+
+        <mat-table formArrayName="columns" [dataSource]="dataSource">
+          <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; let i = index; columns: displayColumns;"></mat-row>
+          
+          <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index"  [formGroupName]="index"> 
+              <input type="text" formControlName="name"> </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index"  [formGroupName]="index"> 
+              <input type="text" formControlName="type"> </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="isPrimaryKey">
+            <mat-header-cell *matHeaderCellDef> Is Primary Key </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index"  [formGroupName]="index"> 
+              <mat-checkbox formControlName="isPrimaryKey"></mat-checkbox> </mat-cell>
+          </ng-container>
+    
+          <ng-container matColumnDef="isNull">
+            <mat-header-cell *matHeaderCellDef> Is Null </mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index"  [formGroupName]="index"> 
+              <mat-checkbox  formControlName="isNull" ></mat-checkbox> </mat-cell>
+          </ng-container>
+        </mat-table>
+        <button type="button" (click)="addRow()">Add row</button>
+        </form>
+        <pre>{{ form.value | json }}</pre>
       <div>
         <button mat-button matStepperNext>Next</button>
       </div>
     </mat-step>
-    <mat-step [stepControl]="entityFormGroup" class="template-form-container">
-      <form [formGroup]="entityFormGroup" class="template-form">
+    <mat-step  class="template-form-container">
+      <form  class="template-form">
         <ng-template matStepLabel>Fill out your entity template</ng-template>
         <mat-form-field appearance="fill" class="form-field">
           <mat-label>Entity template</mat-label>
@@ -19,7 +51,7 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="serviceFormGroup" label="Fill out your service template" class="template-form-container">
+    <!-- <mat-step [stepControl]="serviceFormGroup" label="Fill out your service template" class="template-form-container">
       <form [formGroup]="serviceFormGroup" class="template-form">
         <mat-form-field appearance="fill" class="form-field">
           <mat-label>Service template</mat-label>
@@ -42,7 +74,7 @@
             <button mat-button matStepperNext>Next</button>
           </div>
         </form>
-    </mat-step>
+    </mat-step> -->
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
       <div>

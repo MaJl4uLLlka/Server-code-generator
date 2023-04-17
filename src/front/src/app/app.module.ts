@@ -37,7 +37,7 @@ import { ShareRepositoryComponent } from './components/repository/share-reposito
 import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatCheckboxModule} from '@angular/material/checkbox';
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,6 +81,7 @@ import {MatCardModule} from '@angular/material/card';
     MatMenuModule,
     MatStepperModule,
     MatCardModule,
+    MatCheckboxModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

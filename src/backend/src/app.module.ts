@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { RepositoryModule } from './repository/repository.module';
 import { ServicesModule } from './services/services.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { TemplateModule } from './template/template.module';
+import { EntityManagmentModule } from './entity-managment/entity-managment.module';
 
 @Module({
   imports: [
@@ -22,6 +24,8 @@ import { SubscriptionModule } from './subscription/subscription.module';
     RepositoryModule,
     ServicesModule,
     SubscriptionModule,
+    TemplateModule,
+    EntityManagmentModule,
   ],
   controllers: [],
   providers: [],
