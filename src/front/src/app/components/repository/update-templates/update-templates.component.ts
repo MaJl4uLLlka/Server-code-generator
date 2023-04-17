@@ -18,7 +18,7 @@ interface EntityColumn {
 })
 export class UpdateTemplatesComponent implements OnInit  {
   id: string;
-  data: EntityColumn[] = [{name: 'id', type: 'INTEGER', isPrimaryKey: true, isNull: false}];
+  data: EntityColumn[] = [{name: 'id', type: 'STRING', isPrimaryKey: true, isNull: false}];
   dataSource = new BehaviorSubject<AbstractControl[]>([]);
   displayColumns = ['name', 'type', 'isPrimaryKey', 'isNull'];
   rows: FormArray = this._formBuilder.array([]);
@@ -58,7 +58,7 @@ export class UpdateTemplatesComponent implements OnInit  {
     //   .subscribe(
     //     data => {
     //       const {entityTemplate, serviceTemplate, controllerTemplate} = (data as any).template;
-    //       this.entityFormGroup.controls.entityTemplate.setValue(
+    //        this.entityFormGroup.controls.entityTemplate.setValue(
     //         entityTemplate.value && entityTemplate.value !== ''? entityTemplate.value: ''
     //       );
     //       this.serviceFormGroup.controls.serviceTemplate.setValue(
