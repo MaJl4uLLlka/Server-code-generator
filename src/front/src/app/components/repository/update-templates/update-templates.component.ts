@@ -18,7 +18,7 @@ interface EntityColumn {
 })
 export class UpdateTemplatesComponent implements OnInit  {
   id: string;
-  data: EntityColumn[] = [{name: 'id', type: 'string', isPrimaryKey: true, isNull: false}];
+  data: EntityColumn[] = [{name: 'id', type: 'INTEGER', isPrimaryKey: true, isNull: false}];
   dataSource = new BehaviorSubject<AbstractControl[]>([]);
   displayColumns = ['name', 'type', 'isPrimaryKey', 'isNull'];
   rows: FormArray = this._formBuilder.array([]);
@@ -41,10 +41,10 @@ export class UpdateTemplatesComponent implements OnInit  {
 
   addRow(d?: EntityColumn, noUpdate?: boolean) {
     const row = this._formBuilder.group({
-      'name'   : [d && d.name ? d.name : null, []],
-      'type'   : [d && d.type ? d.type: null, []],
-      'isPrimaryKey'   : [d ? d.isPrimaryKey : null, []],
-      'isNull'   : [d ? d.isNull : null, []],
+      'name'   : [d && d.name ? d.name : 'example', []],
+      'type'   : [d && d.type ? d.type: 'STRING', []],
+      'isPrimaryKey'   : [d ? d.isPrimaryKey : false, []],
+      'isNull'   : [d ? d.isNull : false, []],
     });
     this.rows.push(row);
     if (!noUpdate) { this.updateView(); }
