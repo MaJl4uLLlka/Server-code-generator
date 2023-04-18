@@ -47,25 +47,17 @@ model Entity {
   schema Json
   fromLinks Link[]          @relation("from")
   toLinks   Link[]          @relation("to")
-  usedInServices  EntitiesOnServices[]
+  service Service?
 }
-
-model EntitiesOnServices {
-  entity Entity @relation(fields: [entityId], references: [id])
-  entityId String
-  service Service @relation(fields: [serviceId], references: [id])
-  serviceId String
-
-  @@id([entityId, serviceId])
-}
-
 
 model Link {
   id String @id @default(uuid())
   fromEntity Entity @relation("from", fields: [fromEntityId], references: [id], onDelete: Cascade)
   fromEntityId String
+  sourceKey String?
   toEntity Entity @relation("to", fields: [toEntityId], references: [id], onDelete: Cascade)
   toEntityId   String
+  foreignKey  String?
   linkType     LinkType @default(None)
 }
 
@@ -75,8 +67,9 @@ model Service {
   prefix String
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
   repositoryId String
-  entities EntitiesOnServices[]
-  usedInControllers ServicesOnControllers[]
+  entity Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  entityId String @unique
+  controller Controller?
 }
 
 model Controller {
@@ -84,16 +77,8 @@ model Controller {
   name String
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
   repositoryId String
-  services ServicesOnControllers[]
-}
-
-model ServicesOnControllers {
-  service Service @relation(fields: [serviceId], references: [id])
-  serviceId String
-  controller Controller @relation(fields: [controllerId], references: [id])
-  controllerId String
-
-  @@id([serviceId, controllerId])
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId String @unique
 }
 
 model Subscription {
