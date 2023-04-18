@@ -54,17 +54,14 @@ model Link {
   id String @id @default(uuid())
   fromEntity Entity @relation("from", fields: [fromEntityId], references: [id], onDelete: Cascade)
   fromEntityId String
-  sourceKey String?
   toEntity Entity @relation("to", fields: [toEntityId], references: [id], onDelete: Cascade)
   toEntityId   String
-  foreignKey  String?
   linkType     LinkType @default(None)
 }
 
 model Service {
   id String @id @default(uuid())
   name String
-  prefix String
   repository Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
   repositoryId String
   entity Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)

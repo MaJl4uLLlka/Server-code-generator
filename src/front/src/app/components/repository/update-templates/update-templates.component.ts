@@ -20,9 +20,16 @@ export class UpdateTemplatesComponent implements OnInit  {
   id: string;
   data: EntityColumn[] = [{name: 'id', type: 'STRING', isPrimaryKey: true, isNull: false}];
   dataSource = new BehaviorSubject<AbstractControl[]>([]);
-  displayColumns = ['name', 'type', 'isPrimaryKey', 'isNull'];
+  displayColumns = ['name', 'type', 'isPrimaryKey', 'isNull', 'delete'];
   rows: FormArray = this._formBuilder.array([]);
   form: FormGroup = this._formBuilder.group({ columns: this.rows });
+  fromEntities: {name: string, id: string}[] = [{id: '1', name: 'hello'}, {id: '2', name: 'world'}];
+  toEntities: {name: string, id: string}[] = [{id: '1', name: 'hello'}, {id: '2', name: 'world'}];
+  linksForm: FormGroup = this._formBuilder.group({
+    from: new FormControl('', [Validators.required]),
+    to: new FormControl('', [Validators.required]),
+    linkType: new FormControl('', [Validators.required])
+  });
 
   constructor(private _formBuilder: FormBuilder, private repositoryService: RepositoryService, private activatedRoute: ActivatedRoute, private router: Router ) {
     this.id = this.activatedRoute.snapshot.params['repositoryId'];
@@ -40,6 +47,11 @@ export class UpdateTemplatesComponent implements OnInit  {
     }
   }
 
+  removeRow(index: number) {
+    this.rows.removeAt(index);
+    this.updateView();
+  }
+
   addRow(d?: EntityColumn, noUpdate?: boolean) {
     const row = this._formBuilder.group({
       'name'   : [d && d.name ? d.name : 'example', []],
@@ -55,33 +67,21 @@ export class UpdateTemplatesComponent implements OnInit  {
     this.dataSource.next(this.rows.controls);
   }
   
-    // this.repositoryService.getRepositoryById(this.id)
-    //   .subscribe(
-    //     data => {
-    //       const {entityTemplate, serviceTemplate, controllerTemplate} = (data as any).template;
-    //        this.entityFormGroup.controls.entityTemplate.setValue(
-    //         entityTemplate.value && entityTemplate.value !== ''? entityTemplate.value: ''
-    //       );
-    //       this.serviceFormGroup.controls.serviceTemplate.setValue(
-    //         serviceTemplate.value && serviceTemplate.value !== ''? serviceTemplate.value: ''
-    //       );
-    //       this.controllerFormGroup.controls.controllerTemplate.setValue(
-    //         controllerTemplate.value && controllerTemplate.value !== ''? controllerTemplate.value: ''
-    //       );
-    //     }
-    //   );
-  //}
-
   OnSubmit() {
-    // this.repositoryService.updateRepositoryTemplate(this.id, {
-    //   entityTemplate: this.entityFormGroup.value.entityTemplate as string,
-    //   serviceTemplate: this.serviceFormGroup.value.serviceTemplate as string,
-    //   controllerTemplate: this.controllerFormGroup.value.controllerTemplate as string,
-    // })
-    // .subscribe(
-    //   data => {
-    //     this.router.navigate(['repositories', this.id]);
-    //   }
-    // );
+    this.repositoryService.updateRepositoryTemplate(this.id, {
+      name: this.form.value.entityName,
+      schema: JSON.stringify(this.form.value.columns)
+    })
+    .subscribe(
+      data => {
+        this.emptyTable();
+        this.data.forEach((d) => this.addRow(d, false));
+        this.updateView();
+      }
+    );
+  }
+
+  saveLink() {
+    console.log(this.linksForm.value);
   }
 }

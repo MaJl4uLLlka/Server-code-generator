@@ -83,9 +83,9 @@ export class RepositoryService {
 
   updateRepositoryTemplate(
     repositoryId: string, 
-    templateData: {entityTemplate: string, serviceTemplate: string, controllerTemplate: string}
+    entityData: { name: string, schema: string }
   ) {
-    return this.http.put(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/template', templateData,
+    return this.http.post(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId, entityData,
       {
         headers: {
           'app-auth': `${localStorage.getItem('token')}`,

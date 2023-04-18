@@ -47,21 +47,47 @@
             <mat-cell *matCellDef="let row; let index = index"  [formGroupName]="index"> 
               <mat-checkbox  formControlName="isNull" ></mat-checkbox> </mat-cell>
           </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <mat-header-cell *matHeaderCellDef> Delete</mat-header-cell>
+            <mat-cell *matCellDef="let row; let index = index"> 
+              <button mat-raised-button (click)="removeRow(index)" color="warn">Delete</button>
+            </mat-cell>
+          </ng-container>
         </mat-table>
         <button mat-raised-button color="accent" (click)="addRow()">Add row</button>
+        <button mat-raised-button color="accent" (click)="OnSubmit()">Save</button>
         </form>
-        <pre>{{ form.value | json }}</pre>
+        <!-- <pre>{{ form.value | json }}</pre> -->
       <div>
         <button mat-raised-button color="accent" matStepperNext>Next</button>
       </div>
     </mat-step>
     <mat-step  class="template-form-container">
-      <form  class="template-form">
-        <ng-template matStepLabel>Fill out your entity template</ng-template>
-        <mat-form-field appearance="fill" class="form-field">
-          <mat-label>Entity template</mat-label>
-          <textarea matInput formControlName="entityTemplate"></textarea>
+      <form [formGroup]="linksForm">
+        <ng-template matStepLabel>Create links between entities</ng-template>
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a main entity</mat-label>
+          <mat-select formControlName="from">
+            <mat-option *ngFor="let entity of fromEntities" [value]="entity.id">{{entity.name}}</mat-option>
+          </mat-select>
         </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a link type</mat-label>
+          <mat-select formControlName="linkType">
+            <mat-option value="None">None</mat-option>
+            <mat-option value="OneToOne" > One-To-One</mat-option>
+            <mat-option value="OneToMany">One-To-Many</mat-option>
+            <mat-option value="ManyToMany">Many-To-Many</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Choose a foreign entity </mat-label>
+          <mat-select formControlName="to">
+            <mat-option *ngFor="let entity of toEntities" [value]="entity.id">{{entity.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="saveLink()">Save link</button>
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button matStepperNext>Next</button>

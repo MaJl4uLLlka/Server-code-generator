@@ -15,6 +15,18 @@ export class EntityManagmentService {
       data: {
         ...createEntityManagmentDto,
         repositoryId,
+        service: {
+          create: {
+            name: createEntityManagmentDto.name,
+            repositoryId: repositoryId,
+            controller: {
+              create: {
+                name: createEntityManagmentDto.name,
+                repositoryId: repositoryId,
+              },
+            },
+          },
+        },
       },
     });
   }
