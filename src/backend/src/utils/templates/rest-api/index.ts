@@ -146,17 +146,43 @@ function buildEntities(entities: any[]) {
     entityTemplate += `${entityModelName}.makeRelations = (sequelizeInst) => {`;
     for (const link of entity.fromLinks) {
       if (link.linkType === 'OneToOne') {
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.hasOne(sequelizeInst.models.${
+          link.toEntity.name + 'Model'
+        });`;
       } else if (link.linkType === 'OneToMany') {
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.hasMany(sequelizeInst.models.${
+          link.toEntity.name + 'Model'
+        });`;
       } else if (link.linkType === 'ManyToMany') {
-      } //TODO: here
-      `
-        sequelizeInst.models.${entityModelName}.(sequelizeInst.models.degreeMaster, {
-        sourceKey: 'degreeID',
-        foreignKey: 'degreeID',
-        as: '${entity.name}',
-    });`;
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.belongsToMany(sequelizeInst.models.${
+          link.toEntity.name + 'Model'
+        },
+        { through: '${link.fromEntity.name}_${link.toEntity.name}' });`;
+      }
     }
 
+    for (const link of entity.toLinks) {
+      if (link.linkType === 'OneToOne') {
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.belongsTo(sequelizeInst.models.${
+          link.fromEntity.name + 'Model'
+        });`;
+      } else if (link.linkType === 'OneToMany') {
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.belongsTo(sequelizeInst.models.${
+          link.fromEntity.name + 'Model'
+        });`;
+      } else if (link.linkType === 'ManyToMany') {
+        entityTemplate += `
+        sequelizeInst.models.${entityModelName}.belongsToMany(sequelizeInst.models.${
+          link.fromEntity.name + 'Model'
+        },
+        { through: '${link.fromEntity.name}_${link.toEntity.name}' });`;
+      }
+    }
     entityTemplate += `};
 
     module.exports = {
@@ -273,9 +299,6 @@ function buildControllers(controllers: any[]) {
 
   for (const controller of controllers) {
     const relatedServiceName = controller.service.name + 'Service';
-    const variableName =
-      relatedServiceName[0] +
-      relatedServiceName.substring(1, relatedServiceName.length - 1);
     const controllerTemplate = `
     @@controllers/${controller.name}Controller.js;
     const { express }  = require('../app');
