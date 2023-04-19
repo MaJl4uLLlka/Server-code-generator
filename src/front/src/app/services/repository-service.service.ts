@@ -2,7 +2,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 import { map, Observable } from 'rxjs';
-import { DeleteRepositoryComponent } from '../components/repository/delete-repository/delete-repository.component';
 import { APPLICATION_DOMAIN } from '../config';
 import { Repository, RepositoryServerData } from '../dto/repository';
 

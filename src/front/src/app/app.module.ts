@@ -31,9 +31,7 @@ import { CreateRepositoryComponent } from './components/repositories/create-repo
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
-import { DeleteRepositoryComponent } from './components/repository/delete-repository/delete-repository.component';
 import { UpdateRepositoryComponent } from './components/repository/update-repository/update-repository.component';
-import { ShareRepositoryComponent } from './components/repository/share-repository/share-repository.component';
 import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
@@ -54,9 +52,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     ProfileSettingsComponent,
     SubscriptionComponent,
     CreateRepositoryComponent,
-    DeleteRepositoryComponent,
     UpdateRepositoryComponent,
-    ShareRepositoryComponent,
     UpdateTemplatesComponent,
     DeleteRepositoryDialog,
   ],
