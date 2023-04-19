@@ -31,4 +31,12 @@ export class SubscriptionService {
       }
     })
   }
+
+  checkout() {
+    return this.http.post(APPLICATION_DOMAIN + '/subscription/checkout-session', {}, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    })
+  }
 }

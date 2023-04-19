@@ -57,4 +57,12 @@ export class SubscriptionComponent implements OnInit {
         );
     }
   }
+
+  checkout() {
+    this.subscriptionService.checkout()
+      .subscribe((data: any) =>{
+        console.log(data);
+        window.location = data.url 
+      });
+  }
 }

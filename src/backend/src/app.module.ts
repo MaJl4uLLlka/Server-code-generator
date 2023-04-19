@@ -46,6 +46,7 @@ export class AppModule implements NestModule {
         { path: 'repositories/:id', method: RequestMethod.DELETE },
         { path: 'subscription', method: RequestMethod.POST },
         { path: 'subscription', method: RequestMethod.GET },
+        { path: 'subscription/checkout-session', method: RequestMethod.POST },
       );
   }
 }

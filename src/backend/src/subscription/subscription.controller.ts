@@ -27,4 +27,14 @@ export class SubscriptionController {
     const user = req['user'] as User;
     return this.subscriptionService.getSubscription(user.stripeAccountId);
   }
+
+  @Post('checkout-session')
+  async createCheckoutSession(@Req() req: any) {
+    const user = req.user as User;
+    const session = await this.subscriptionService.createCheckoutSession(
+      user.id,
+    );
+
+    return session;
+  }
 }

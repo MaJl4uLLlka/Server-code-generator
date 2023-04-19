@@ -8,6 +8,9 @@ import {
   Delete,
   Req,
   Query,
+  Header,
+  Res,
+  StreamableFile,
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
@@ -67,5 +70,22 @@ export class RepositoryController {
   async isUserRepositoryOwner(@Req() req: any, @Param('id') id: string) {
     const user = req['user'] as User;
     return await this.repositoryService.isUserRepositoryOwner(id, user.id);
+  }
+
+  @Get(':repositoryId/download')
+  async downloadCode(
+    @Req() req: any,
+    @Res() res: any,
+    @Param('repositoryId') id: string,
+  ) {
+    const user = req.user as User;
+    const repository = await this.repositoryService.findOne(id, user.id);
+    const readableStream = await this.repositoryService.prepareArchive(id);
+
+    res.set({
+      'Content-Type': 'application/zip',
+      'Content-Disposition': `attachment; filename="${repository.name}.zip"`,
+    });
+    return new StreamableFile(readableStream);
   }
 }

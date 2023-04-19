@@ -27,7 +27,7 @@ function buildConstants(config: Config): string {
     apiPrefix = null;
   }
   const constantTemplates = `
-  @@constants/index.js;
+  @@constants/index.js;\n
   const apiPrefix = ${apiPrefix};
 
   module.exports = {
@@ -39,7 +39,7 @@ function buildConstants(config: Config): string {
 
 function buildDatabaseConfig(config: Config) {
   const template = `
-  @@db/index.js;
+  @@db/index.js;\n
   const Sequelize = require('sequelize');
   const sequelize = new Sequelize('${config.dbConnectionUri}');
 
@@ -61,7 +61,7 @@ function buildDatabaseConfig(config: Config) {
 
 function buildIndex() {
   const template = `
-  @@index.js;
+  @@index.js;\n
   const { initApp } = require('./app');
   const { connectToDBAndSync } = require('./db');
 
@@ -76,7 +76,7 @@ function buildIndex() {
 
 function buildApp(config: Config) {
   const template = `
-  @@app.js;
+  @@app.js;\n
   const express = require('express');
   const app = express();
   const { apiPrefix } = require('./constants');
@@ -117,7 +117,7 @@ function buildEntities(entities: any[]) {
     const entityModelName = entity.name + 'Model';
     entitiesInfo.push({ modelName: entityModelName, entityName: entity.name });
     let entityTemplate = `
-    @@${path};
+    @@${path};\n
     const { sequelize }  = require('../db');
     const { DataTypes } = require('sequelize');
     
@@ -193,7 +193,7 @@ function buildEntities(entities: any[]) {
   }
 
   template += `
-  @@entities/index.js;
+  @@entities/index.js;\n
   const { sequelize } = require('../db');
   `;
 
@@ -229,7 +229,7 @@ function buildServices(services: any[]) {
       relatedEntityName[0] +
       relatedEntityName.substring(1, relatedEntityName.length - 1);
     const serviceTemplate = `
-    @@services/${service.name}Service.js;
+    @@services/${service.name}Service.js;\n
     const { ${relatedEntityName} } = require('../entities');
 
     async function create(data) {
@@ -281,7 +281,7 @@ function buildServices(services: any[]) {
     (name) => `const ${name} = require('./${name}');`,
   );
   template += `
-  @@services/index.js;
+  @@services/index.js;\n
   ${servicesImports.join('\n')}
 
   module.exports = {
@@ -300,7 +300,7 @@ function buildControllers(controllers: any[]) {
   for (const controller of controllers) {
     const relatedServiceName = controller.service.name + 'Service';
     const controllerTemplate = `
-    @@controllers/${controller.name}Controller.js;
+    @@controllers/${controller.name}Controller.js;\n
     const { express }  = require('../app');
     const router = express.Router();
     const { ${relatedServiceName} } = require('../services');
@@ -339,7 +339,7 @@ function buildControllers(controllers: any[]) {
     (name) => `require('./${name}')`,
   );
   template += `
-  @@controllers/index.js;
+  @@controllers/index.js;\n
   const controllers = [
   ${controllersImports.join(',\n')}
   ];

@@ -8,7 +8,10 @@ import {
   Delete,
 } from '@nestjs/common';
 import { EntityManagmentService } from './entity-managment.service';
-import { CreateEntityManagmentDto } from './dto/create-entity-managment.dto';
+import {
+  CreateEntityManagmentDto,
+  CreateLinkDto,
+} from './dto/create-entity-managment.dto';
 import { UpdateEntityManagmentDto } from './dto/update-entity-managment.dto';
 
 @Controller('entity-managment')
@@ -26,6 +29,14 @@ export class EntityManagmentController {
       repositoryId,
       createEntityManagmentDto,
     );
+  }
+
+  @Post(':repositoryId/create-link')
+  async createLink(
+    @Body() createLinkDto: CreateLinkDto,
+    @Param('repositoryId') repositoryId: string,
+  ) {
+    return await this.entityManagmentService.createLink(createLinkDto);
   }
 
   @Get(':repositoryId')

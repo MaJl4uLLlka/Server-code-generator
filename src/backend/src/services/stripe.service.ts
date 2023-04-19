@@ -55,4 +55,18 @@ export class StripeService implements OnModuleInit {
 
     return subscriptionList.data;
   }
+
+  async createCustomerCheckoutSession(customerId: string) {
+    const session = await this.stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'subscription',
+      line_items: [{ price: process.env.SUBSCRIPTION_PRICE, quantity: 1 }],
+      success_url: `${process.env.BASE_URL}`,
+      cancel_url: `${process.env.BASE_URL}`,
+      currency: 'usd',
+      customer: customerId,
+    });
+
+    return session;
+  }
 }

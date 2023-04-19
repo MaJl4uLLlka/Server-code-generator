@@ -42,4 +42,18 @@ export class SubscriptionService {
 
     return subscription[0];
   }
+
+  async createCheckoutSession(userId: string) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    const session = await this.stripeService.createCustomerCheckoutSession(
+      user.stripeAccountId,
+    );
+
+    return { url: session.url };
+  }
 }

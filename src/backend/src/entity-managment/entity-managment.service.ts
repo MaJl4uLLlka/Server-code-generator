@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateEntityManagmentDto } from './dto/create-entity-managment.dto';
+import {
+  CreateEntityManagmentDto,
+  CreateLinkDto,
+} from './dto/create-entity-managment.dto';
 import { UpdateEntityManagmentDto } from './dto/update-entity-managment.dto';
 import { PrismaService } from '../services/prisma.service';
 
@@ -13,20 +16,31 @@ export class EntityManagmentService {
   ) {
     return await this.prismaService.entity.create({
       data: {
-        ...createEntityManagmentDto,
+        name: createEntityManagmentDto.name.trim(),
+        schema: createEntityManagmentDto.schema,
         repositoryId,
         service: {
           create: {
-            name: createEntityManagmentDto.name,
+            name: createEntityManagmentDto.name.trim(),
             repositoryId: repositoryId,
             controller: {
               create: {
-                name: createEntityManagmentDto.name,
+                name: createEntityManagmentDto.name.trim(),
                 repositoryId: repositoryId,
               },
             },
           },
         },
+      },
+    });
+  }
+
+  async createLink(createLinkDto: CreateLinkDto) {
+    return await this.prismaService.link.create({
+      data: {
+        fromEntityId: createLinkDto.from,
+        toEntityId: createLinkDto.to,
+        linkType: createLinkDto.linkType,
       },
     });
   }

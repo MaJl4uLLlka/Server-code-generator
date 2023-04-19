@@ -5,6 +5,8 @@ import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { StripeService } from '../services/stripe.service';
 import { User } from '@prisma/client';
+import JSZip from 'jszip';
+import { buildTemplate } from '../utils/templates/rest-api';
 
 @Injectable()
 export class RepositoryService {
@@ -181,5 +183,56 @@ export class RepositoryService {
     }
 
     return { isUserOwner };
+  }
+
+  async getRepositoryWithDeepDependencies(repositoryId: string) {
+    return await this.prismaService.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        entities: {
+          include: {
+            fromLinks: true,
+            toLinks: true,
+          },
+        },
+        services: {
+          include: {
+            entity: true,
+          },
+        },
+        controllers: {
+          include: {
+            service: true,
+          },
+        },
+        config: true,
+      },
+    });
+  }
+
+  async prepareArchive(repositoryId: string) {
+    const zip = new JSZip();
+    const repository = await this.getRepositoryWithDeepDependencies(
+      repositoryId,
+    );
+
+    const template = buildTemplate(repository);
+    const parsedPathes = template.match(/@@(.+)\.js;/g);
+    const pathes = parsedPathes.map((path) =>
+      path.replace('@@', '').replace(';', ''),
+    );
+
+    const preparedTemplates = template
+      .replace(/@@(.+)\.js;/g, '@@')
+      .split('@@')
+      .filter((value) => value.length !== 0);
+
+    for (let index = 0; index < pathes.length; index++) {
+      zip.file(pathes[index], preparedTemplates[index]);
+    }
+
+    return await zip.generateAsync({ type: 'uint8array' });
   }
 }
