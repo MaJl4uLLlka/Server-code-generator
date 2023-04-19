@@ -23,7 +23,7 @@ import { InfoComponent } from './components/info/info.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RepositoryComponent } from './components/repository/repository.component';
+import { RepositoryComponent, DeleteRepositoryDialog } from './components/repository/repository.component';
 import {MatIconModule} from '@angular/material/icon';
 import { ProfileSettingsComponent } from './components/profile/profile-settings/profile-settings.component';
 import { SubscriptionComponent } from './components/profile/subscription/subscription.component';
@@ -38,6 +38,8 @@ import { UpdateTemplatesComponent } from './components/repository/update-templat
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialogModule} from '@angular/material/dialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,7 +57,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     DeleteRepositoryComponent,
     UpdateRepositoryComponent,
     ShareRepositoryComponent,
-    UpdateTemplatesComponent
+    UpdateTemplatesComponent,
+    DeleteRepositoryDialog,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +85,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatStepperModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

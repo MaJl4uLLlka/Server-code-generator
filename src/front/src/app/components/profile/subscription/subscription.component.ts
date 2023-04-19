@@ -28,36 +28,6 @@ export class SubscriptionComponent implements OnInit {
       );
   }
 
-  get number() {
-    return this.cardForm.get('number');
-  }
-
-  get exp_month() {
-    return this.cardForm.get('exp_month');
-  }
-
-  get exp_year() {
-    return this.cardForm.get('exp_year');
-  }
-
-  get cvc() {
-    return this.cardForm.get('cvc');
-  }
-
-  OnSubmit() {
-    if (this.cardForm.valid) {
-      this.subscriptionService.subscribe(this.cardForm.value as any)
-        .subscribe(
-          data => {
-            this.router.navigate(['info']);
-          },
-          err => {
-            this.snackBar.open(err.error.message, undefined, { duration: 2500 });
-          }
-        );
-    }
-  }
-
   checkout() {
     this.subscriptionService.checkout()
       .subscribe((data: any) =>{

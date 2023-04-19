@@ -1,36 +1,6 @@
 <h1 class="white-color" *ngIf="hasSubscription">User has now an active subscription</h1>
 <div class="form-container" *ngIf="!hasSubscription">
-    <h1>Subscribe for 4.99$ per month</h1>
-    <form [formGroup]="cardForm" (ngSubmit)="OnSubmit()">
-        <mat-form-field>
-            <mat-label>Card Number</mat-label>
-            <input matInput formControlName="number" type="text"/>
-            <mat-error *ngIf="number?.errors?.['incorrect']">Card number incorrect</mat-error>
-        </mat-form-field>
-        <div class="card-expire-date">
-            <mat-form-field class="expire-date-field">
-                <mat-label>Month</mat-label>
-                <input matInput formControlName="exp_month" type="text"/>
-                <mat-error *ngIf="exp_month?.errors?.['incorrect']">Month incorrect</mat-error>
-            </mat-form-field>
-            <h2>/</h2>
-
-            <mat-form-field class="expire-date-field">
-                <mat-label>Year</mat-label>
-                <input matInput formControlName="exp_year" type="text"/>
-                <mat-error *ngIf="exp_year?.errors?.['incorrect']">Year incorrect</mat-error>
-            </mat-form-field>
-
-            <div class="spacer"></div>
-            <mat-form-field class="expire-date-field">
-                <mat-label>CVС</mat-label>
-                <input matInput formControlName="cvc" type="text"/>
-                <mat-error *ngIf="cvc?.errors?.['incorrect']">Cvc incorrect</mat-error>
-            </mat-form-field>
-        </div>
-        <div class="center margin-top">
-            <button mat-raised-button color="primary" type="submit">Subscribe</button>
-            <button mat-raised-button color="primary" (click)="checkout()">Test checkout</button>
-        </div>
-    </form>
+    <div class="center margin-top">
+        <button mat-raised-button color="primary" (click)="checkout()">Subscribe</button>
+    </div>
 </div>

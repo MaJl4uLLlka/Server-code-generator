@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from '../../services/repository-service.service';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-repository',
@@ -9,14 +10,14 @@ import { RepositoryService } from '../../services/repository-service.service';
 })
 export class RepositoryComponent implements OnInit {
   id: string;
-  isPrivate: boolean = false;
   isUserOwner: boolean;
-  jsonSchema: string = '{"controller": "User", "service": "User", entity: "User"}';
-  controllerTemplate: string = '(empty)';
-  serviceTemplate: string =  '(empty)';
-  entityTemplate: string =  '(empty)';
 
-  constructor(private activatedRoute: ActivatedRoute, private repositoryService: RepositoryService){
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private repositoryService: RepositoryService,
+    public dialog: MatDialog
+  ){
     this.id = activatedRoute.snapshot.params['repositoryId'];
   }
 
@@ -25,28 +26,36 @@ export class RepositoryComponent implements OnInit {
       .subscribe(
         data => { this.isUserOwner = data.isUserOwner }
       );
-
-    this.repositoryService.isRepositoryPrivate(this.id)
-      .subscribe(
-        data => { this.isPrivate = data.isPrivate }
-      );
-
-    setTimeout(() => {
-      let observable: any = null;
-
-      if (this.isPrivate) {
-        observable = this.repositoryService.getCompletedPrivateTemplate(this.id)
-      }
-      else {
-        observable = this.repositoryService.getCompletedPublicTemplate(this.id)
-      }
-      observable.subscribe(
-        (data: any) => {
-          this.entityTemplate = data.entityTemplate;
-          this.serviceTemplate = data.serviceTemplate;
-          this.controllerTemplate = data.controllerTemplate;
-      });
-
-    }, 1500);
   }
+
+  openDeleteRepositoryDialog(){
+    const dialogRef = this.dialog.open(DeleteRepositoryDialog, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(needToDelete => {
+      if(!needToDelete) {
+        return;
+      }
+
+      this.repositoryService.deleteRepository(this.id)
+        .subscribe(
+          data => {
+            this.router.navigate(['repositories']);
+          }
+        )
+      });
+  }
+}
+
+
+@Component({
+  selector: 'delete-repository-dialog',
+  templateUrl: './delete-repository-dialog.html',
+})
+export class DeleteRepositoryDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DeleteRepositoryDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {}
 }
