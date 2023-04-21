@@ -46,6 +46,10 @@ export class RepositoryComponent implements OnInit {
         )
       });
   }
+
+  downloadArchive() {
+    this.repositoryService.downloadRepo(this.id);
+  }
 }
 
 

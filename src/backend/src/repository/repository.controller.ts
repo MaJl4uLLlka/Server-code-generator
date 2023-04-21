@@ -17,6 +17,7 @@ import { CreateRepositoryDto } from './dto/create-repository.dto';
 import { UpdateRepositoryDto } from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
+import { Response } from 'express';
 
 @Controller('repositories')
 export class RepositoryController {
@@ -75,17 +76,29 @@ export class RepositoryController {
   @Get(':repositoryId/download')
   async downloadCode(
     @Req() req: any,
-    @Res() res: any,
-    @Param('repositoryId') id: string,
+    @Res() res: Response,
+    @Param('repositoryId') repositoryId: string,
   ) {
-    const user = req.user as User;
-    const repository = await this.repositoryService.findOne(id, user.id);
-    const readableStream = await this.repositoryService.prepareArchive(id);
+    try {
+      const user = req.user as User;
+      const repository = await this.repositoryService.findOne(
+        repositoryId,
+        user.id,
+      );
+      const buffer = await this.repositoryService.prepareArchive(repositoryId);
 
-    res.set({
-      'Content-Type': 'application/zip',
-      'Content-Disposition': `attachment; filename="${repository.name}.zip"`,
-    });
-    return new StreamableFile(readableStream);
+      console.log(Buffer);
+      console.log(Buffer.isBuffer(buffer));
+
+      res.set({
+        'Content-Length': buffer.length,
+        'Content-Type': 'application/octet-stream',
+        'Content-Disposition': `attachment; filename=${repository.name}.zip`,
+      });
+
+      res.send(buffer);
+    } catch (error) {
+      throw error;
+    }
   }
 }

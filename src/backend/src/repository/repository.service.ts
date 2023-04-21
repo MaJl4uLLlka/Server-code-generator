@@ -5,8 +5,8 @@ import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { StripeService } from '../services/stripe.service';
 import { User } from '@prisma/client';
-import JSZip from 'jszip';
 import { buildTemplate } from '../utils/templates/rest-api';
+import AdmZip = require('adm-zip');
 
 @Injectable()
 export class RepositoryService {
@@ -213,7 +213,7 @@ export class RepositoryService {
   }
 
   async prepareArchive(repositoryId: string) {
-    const zip = new JSZip();
+    const zip = new AdmZip();
     const repository = await this.getRepositoryWithDeepDependencies(
       repositoryId,
     );
@@ -227,12 +227,19 @@ export class RepositoryService {
     const preparedTemplates = template
       .replace(/@@(.+)\.js;/g, '@@')
       .split('@@')
-      .filter((value) => value.length !== 0);
+      .filter((value) => value.trim().length !== 0);
+
+    console.log(
+      `pathes: ${pathes.length}, templates: ${preparedTemplates.length}`,
+    );
 
     for (let index = 0; index < pathes.length; index++) {
-      zip.file(pathes[index], preparedTemplates[index]);
+      zip.addFile(
+        pathes[index],
+        Buffer.from(preparedTemplates[index], 'utf-8'),
+      );
     }
 
-    return await zip.generateAsync({ type: 'uint8array' });
+    return await zip.toBufferPromise();
   }
 }

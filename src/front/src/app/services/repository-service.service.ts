@@ -104,4 +104,16 @@ export class RepositoryService {
       }
     });
   }
+
+  downloadRepo(repositoryId: string) {
+    this.http.get(APPLICATION_DOMAIN+ '/repositories/' + repositoryId + '/download', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    }).subscribe((data: any) => {
+      const blob = new Blob([data], { type: 'application/zip' });
+      const url= window.URL.createObjectURL(blob);
+      window.open(url);
+    })
+  }
 }
