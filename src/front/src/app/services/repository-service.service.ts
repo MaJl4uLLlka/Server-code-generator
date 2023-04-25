@@ -40,7 +40,7 @@ export class RepositoryService {
     })
   }
 
-  updateRepositoryName(repositoryId: string, repositoryData: {name: string}) {
+  updateRepositoryName(repositoryId: string, repositoryData: any) {
     return this.http.put(APPLICATION_DOMAIN +  '/repositories/' + repositoryId, repositoryData, {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`

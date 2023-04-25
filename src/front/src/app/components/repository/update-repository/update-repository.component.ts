@@ -12,33 +12,70 @@ import { RepositoryService } from 'src/app/services/repository-service.service';
 export class UpdateRepositoryComponent implements OnInit {
   id: string;
   repositoryForm = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)])
+    name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
+    apiPrefix: new FormControl('/api/v1'),
+    port: new FormControl(3000, [Validators.required]),
+    dbConnectionUri: new FormControl('postgresql://localhost:5432/postgres', [Validators.required]),
   });
 
   constructor(private repositoryService: RepositoryService, private activatedRoute: ActivatedRoute, private router: Router, private snackBar: MatSnackBar){
     this.id = this.activatedRoute.snapshot.params['repositoryId'];
   }
 
-  get repoName() {
+  get name() {
     return this.repositoryForm.get('name');
   }
 
-  set repositoryName(value: string) {
+  set repoName(value: string) {
     this.repositoryForm.controls.name.setValue(value);
+  }
+
+  get apiPrefix() {
+    return this.repositoryForm.get('apiPrefix');
+  }
+
+  set apiPrefixSetter(value: string) {
+    this.repositoryForm.controls.apiPrefix.setValue(value);
+  }
+
+  get port() {
+    return this.repositoryForm.get('port');
+  }
+
+  set portSetter(value: number) {
+    this.repositoryForm.controls.port.setValue(value);
+  }
+
+  get dbConnectionUri() {
+    return this.repositoryForm.get('dbConnectionUri');
+  }
+
+  set dbConnectionUriSetter(value: string) {
+    this.repositoryForm.controls.dbConnectionUri.setValue(value);
   }
 
   ngOnInit(): void {
     this.repositoryService.getRepositoryById(this.id)
     .subscribe(
-      data => {
-        this.repositoryName = (data as any).name;
+      (data: any) => {
+        this.repoName = data.name;
+        this.apiPrefixSetter = data.config.apiPrefix;
+        this.portSetter = data.config.port;
+        this.dbConnectionUriSetter = data.config.dbConnectionUri;
       }
     )
   }
 
   OnSubmit() {
     if (this.repositoryForm.valid) {
-      this.repositoryService.updateRepositoryName(this.id, this.repositoryForm.value as any)
+      this.repositoryService.updateRepositoryName(this.id, {
+        name: this.repositoryForm.value.name!,
+        config: {
+          apiPrefix: this.repositoryForm.value.apiPrefix!,
+          port: this.repositoryForm.value.port!,
+          dbConnectionUri: this.repositoryForm.value.dbConnectionUri!
+        }
+      })
       .subscribe(
         data => {
           this.router.navigate(['repositories'])
