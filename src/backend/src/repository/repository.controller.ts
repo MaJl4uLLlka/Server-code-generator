@@ -87,9 +87,6 @@ export class RepositoryController {
       );
       const buffer = await this.repositoryService.prepareArchive(repositoryId);
 
-      console.log(Buffer);
-      console.log(Buffer.isBuffer(buffer));
-
       res.set({
         'Content-Length': buffer.length,
         'Content-Type': 'application/octet-stream',
@@ -100,5 +97,23 @@ export class RepositoryController {
     } catch (error) {
       throw error;
     }
+  }
+
+  @Get(':id/entities')
+  async getAllEntities(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getRepositoryEntities(id);
+  }
+
+  @Get(':id/services')
+  async getAllServices(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getRepositoryServices(id);
+  }
+
+  @Get(':id/controllers')
+  async getAllControllers(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getRepositoryControllers(id);
   }
 }

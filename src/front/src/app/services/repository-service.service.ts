@@ -114,4 +114,20 @@ export class RepositoryService {
       responseType: 'blob'
     });
   }
+
+  getEntities(repositoryId: string) {
+    return this.http.get<{name: string, id: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/entities', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  createLink(repositoryId: string, data: any) {
+    return this.http.post(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId + '/create-link', data, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
 }

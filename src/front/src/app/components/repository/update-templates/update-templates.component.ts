@@ -23,8 +23,8 @@ export class UpdateTemplatesComponent implements OnInit  {
   displayColumns = ['name', 'type', 'isPrimaryKey', 'isNull', 'delete'];
   rows: FormArray = this._formBuilder.array([]);
   form: FormGroup = this._formBuilder.group({ columns: this.rows });
-  fromEntities: {name: string, id: string}[] = [{id: '1', name: 'hello'}, {id: '2', name: 'world'}];
-  toEntities: {name: string, id: string}[] = [{id: '1', name: 'hello'}, {id: '2', name: 'world'}];
+  fromEntities: {name: string, id: string}[] = [];
+  toEntities: {name: string, id: string}[] = [];
   linksForm: FormGroup = this._formBuilder.group({
     from: new FormControl('', [Validators.required]),
     to: new FormControl('', [Validators.required]),
@@ -39,6 +39,7 @@ export class UpdateTemplatesComponent implements OnInit  {
     this.form.addControl('entityName', new FormControl('example', [Validators.required]));
     this.data.forEach((d) => this.addRow(d, false));
     this.updateView();
+    this.loadEntities();
   }
 
   emptyTable() {
@@ -77,11 +78,31 @@ export class UpdateTemplatesComponent implements OnInit  {
         this.emptyTable();
         this.data.forEach((d) => this.addRow(d, false));
         this.updateView();
+        this.loadEntities();
       }
     );
   }
 
+  loadEntities() {
+    this.repositoryService.getEntities(this.id)
+      .subscribe(
+        data => {
+          this.fromEntities = data;
+          this.toEntities = data;
+        }
+      )
+  }
+
   saveLink() {
-    console.log(this.linksForm.value);
+    if (!this.linksForm.valid) {
+      return;
+    }
+
+    this.repositoryService.createLink(this.id, this.linksForm.value)
+      .subscribe(
+        data => {
+          this.form.setValue({from: '', to: '', linkType: ''})
+        }
+      )
   }
 }

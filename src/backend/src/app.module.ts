@@ -42,6 +42,9 @@ export class AppModule implements NestModule {
       { path: 'repositories/:id', method: RequestMethod.GET },
       { path: 'repositories/:id', method: RequestMethod.PUT },
       { path: 'repositories/:id', method: RequestMethod.DELETE },
+      { path: 'repositories/:id/entities', method: RequestMethod.GET },
+      { path: 'repositories/:id/services', method: RequestMethod.GET },
+      { path: 'repositories/:id/controllers', method: RequestMethod.GET },
       {
         path: 'repositories/:repositoryId/download',
         method: RequestMethod.GET,

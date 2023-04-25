@@ -185,6 +185,66 @@ export class RepositoryService {
     return { isUserOwner };
   }
 
+  async getRepositoryEntities(repositoryId: string) {
+    const repository = await this.prismaService.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        entities: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const { entities } = repository;
+
+    return entities;
+  }
+
+  async getRepositoryServices(repositoryId: string) {
+    const repository = await this.prismaService.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        services: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const { services } = repository;
+
+    return services;
+  }
+
+  async getRepositoryControllers(repositoryId: string) {
+    const repository = await this.prismaService.repository.findUnique({
+      where: {
+        id: repositoryId,
+      },
+      include: {
+        controllers: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const { controllers } = repository;
+
+    return controllers;
+  }
+
   async getRepositoryWithDeepDependencies(repositoryId: string) {
     return await this.prismaService.repository.findUnique({
       where: {
@@ -193,8 +253,18 @@ export class RepositoryService {
       include: {
         entities: {
           include: {
-            fromLinks: true,
-            toLinks: true,
+            fromLinks: {
+              include: {
+                toEntity: true,
+                fromEntity: true,
+              },
+            },
+            toLinks: {
+              include: {
+                toEntity: true,
+                fromEntity: true,
+              },
+            },
           },
         },
         services: {
