@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from '../../services/repository-service.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-repository',
@@ -48,7 +49,11 @@ export class RepositoryComponent implements OnInit {
   }
 
   downloadArchive() {
-    this.repositoryService.downloadRepo(this.id);
+    this.repositoryService.downloadRepo(this.id)
+      .subscribe(data => {
+        let fileName = "repository.zip";
+        saveAs(data.body!, fileName);
+      });
   }
 }
 

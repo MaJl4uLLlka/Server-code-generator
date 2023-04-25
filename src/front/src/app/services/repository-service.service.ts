@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatGridTileHeaderCssMatStyler } from '@angular/material/grid-list';
 import { map, Observable } from 'rxjs';
@@ -106,14 +106,12 @@ export class RepositoryService {
   }
 
   downloadRepo(repositoryId: string) {
-    this.http.get(APPLICATION_DOMAIN+ '/repositories/' + repositoryId + '/download', {
+    return this.http.get(APPLICATION_DOMAIN+ '/repositories/' + repositoryId + '/download', {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
-      }
-    }).subscribe((data: any) => {
-      const blob = new Blob([data], { type: 'application/zip' });
-      const url= window.URL.createObjectURL(blob);
-      window.open(url);
-    })
+      },
+      observe: 'response',
+      responseType: 'blob'
+    });
   }
 }
