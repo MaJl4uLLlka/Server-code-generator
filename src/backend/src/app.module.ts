@@ -52,6 +52,13 @@ export class AppModule implements NestModule {
       { path: 'subscription', method: RequestMethod.POST },
       { path: 'subscription', method: RequestMethod.GET },
       { path: 'subscription/checkout-session', method: RequestMethod.POST },
+      { path: 'entity-managment/:repositoryId', method: RequestMethod.POST },
+      { path: 'entity-managment/:repositoryId', method: RequestMethod.GET },
+      { path: 'entity-managment/:repositoryId/:id', method: RequestMethod.GET },
+      {
+        path: 'entity-managment/:repositoryId/create-link',
+        method: RequestMethod.POST,
+      },
     );
   }
 }
