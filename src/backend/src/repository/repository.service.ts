@@ -335,8 +335,6 @@ export class RepositoryService {
       }
     });
 
-    console.log(links);
-
     const result = links
       .flatMap((link) => link)
       .map((link) => {
