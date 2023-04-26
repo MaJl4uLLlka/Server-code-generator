@@ -27,7 +27,19 @@
             Entities
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <p>Entities here</p>
+      <section class="table-container">
+        <table mat-table [dataSource]="entities">
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
     </mat-expansion-panel>
 
     <mat-expansion-panel>
@@ -36,7 +48,29 @@
             Links between entitities
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <p>Entities here</p>
+      <section class="table-container">
+        <table mat-table [dataSource]="links">
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="from">
+            <th mat-header-cell *matHeaderCellDef> From </th>
+            <td mat-cell *matCellDef="let element"> {{element.from}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="linkType">
+            <th mat-header-cell *matHeaderCellDef> Link type </th>
+            <td mat-cell *matCellDef="let element"> {{element.linkType}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="to">
+            <th mat-header-cell *matHeaderCellDef> To </th>
+            <td mat-cell *matCellDef="let element"> {{element.to}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="linkColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: linkColumns;"></tr>
+        </table>
+      </section>
     </mat-expansion-panel>
 
     <mat-expansion-panel>
@@ -45,7 +79,19 @@
             Services
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <p>Services here</p>
+      <section class="table-container">
+        <table mat-table [dataSource]="services">
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </section>
     </mat-expansion-panel>
 
       <mat-expansion-panel>
@@ -54,7 +100,19 @@
             Controllers
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <p>Controllers here</p>
+        <section class="table-container">
+          <table mat-table [dataSource]="controllers">
+        
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+        
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </section>
       </mat-expansion-panel>
 </mat-accordion>
   

@@ -123,6 +123,30 @@ export class RepositoryService {
     });
   }
 
+  getServices(repositoryId: string) {
+    return this.http.get<{name: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/services', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  getControllers(repositoryId: string) {
+    return this.http.get<{name: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/controllers', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  getLinks(repositoryId: string) {
+    return this.http.get<{from: string, to: string, linkType: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/links', {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
   createLink(repositoryId: string, data: any) {
     return this.http.post(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId + '/create-link', data, {
       headers: {

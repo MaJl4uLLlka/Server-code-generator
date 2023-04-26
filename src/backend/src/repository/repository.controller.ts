@@ -116,4 +116,10 @@ export class RepositoryController {
     const user = req['user'] as User;
     return await this.repositoryService.getRepositoryControllers(id);
   }
+
+  @Get(':id/links')
+  async getAllLinks(@Req() req: any, @Param('id') id: string) {
+    const user = req['user'] as User;
+    return await this.repositoryService.getAllLinks(id);
+  }
 }

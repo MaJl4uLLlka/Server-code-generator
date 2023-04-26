@@ -312,4 +312,41 @@ export class RepositoryService {
 
     return await zip.toBufferPromise();
   }
+
+  async getAllLinks(repositoryId: string) {
+    const entities = await this.prismaService.entity.findMany({
+      where: {
+        repositoryId: repositoryId,
+      },
+      include: {
+        fromLinks: {
+          include: {
+            fromEntity: true,
+            toEntity: true,
+          },
+        },
+      },
+    });
+
+    const links = [];
+    entities.forEach((entity) => {
+      if (entity.fromLinks.length !== 0) {
+        links.push(entity.fromLinks);
+      }
+    });
+
+    console.log(links);
+
+    const result = links
+      .flatMap((link) => link)
+      .map((link) => {
+        return {
+          from: link.fromEntity.name,
+          to: link.toEntity.name,
+          linkType: link.linkType,
+        };
+      });
+
+    return result;
+  }
 }

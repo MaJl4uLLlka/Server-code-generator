@@ -12,6 +12,12 @@ import { saveAs } from 'file-saver';
 export class RepositoryComponent implements OnInit {
   id: string;
   isUserOwner: boolean;
+  displayedColumns: string[] = ['name'];
+  linkColumns = ['from','linkType', 'to'];
+  links: {from: string, to: string, linkType: string}[] = [];
+  entities: { name: string}[] = [];
+  services: { name: string}[] = [];
+  controllers: { name: string}[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -27,6 +33,8 @@ export class RepositoryComponent implements OnInit {
       .subscribe(
         data => { this.isUserOwner = data.isUserOwner }
       );
+
+      this.loadData();
   }
 
   openDeleteRepositoryDialog(){
@@ -54,6 +62,37 @@ export class RepositoryComponent implements OnInit {
         let fileName = "repository.zip";
         saveAs(data.body!, fileName);
       });
+  }
+
+  loadData() {
+    this.repositoryService.getEntities(this.id)
+      .subscribe(
+        data => {
+          this.entities = data.map(el => {return {name: el.name}});
+        }
+      );
+
+    this.repositoryService.getLinks(this.id)
+        .subscribe(
+          data => {
+            this.links = data;
+          }
+        );
+
+    this.repositoryService.getServices(this.id)
+        .subscribe(
+          data => {
+            this.services = data.map(el => {return {name: el.name}});
+          }
+        );
+
+    this.repositoryService.getControllers(this.id)
+          .subscribe(
+            data => {
+              this.controllers = data.map(el => {return {name: el.name}});
+            }
+          )
+
   }
 }
 
