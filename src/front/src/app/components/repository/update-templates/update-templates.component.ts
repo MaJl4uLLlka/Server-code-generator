@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from '../../../services/repository-service.service';
 import { BehaviorSubject } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface EntityColumn {
   name: string;
@@ -31,7 +32,13 @@ export class UpdateTemplatesComponent implements OnInit  {
     linkType: new FormControl('', [Validators.required])
   });
 
-  constructor(private _formBuilder: FormBuilder, private repositoryService: RepositoryService, private activatedRoute: ActivatedRoute, private router: Router ) {
+  constructor(
+    private _formBuilder: FormBuilder, 
+    private repositoryService: RepositoryService, 
+    private activatedRoute: ActivatedRoute, 
+    private router: Router, 
+    private snackBar: MatSnackBar 
+  ) {
     this.id = this.activatedRoute.snapshot.params['repositoryId'];
   }
 
@@ -79,6 +86,10 @@ export class UpdateTemplatesComponent implements OnInit  {
         this.data.forEach((d) => this.addRow(d, false));
         this.updateView();
         this.loadEntities();
+      },
+      err => {
+        console.log(err.error.message);
+        this.snackBar.open(err.error.message, undefined, { duration: 2000 } );
       }
     );
   }
@@ -102,6 +113,10 @@ export class UpdateTemplatesComponent implements OnInit  {
       .subscribe(
         data => {
           this.form.setValue({from: '', to: '', linkType: ''})
+        },
+        err => {
+          console.log(err.error.message);
+          this.snackBar.open(err.error.message, undefined, { duration: 2000 } );
         }
       )
   }

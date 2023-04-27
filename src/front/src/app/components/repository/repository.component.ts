@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RepositoryService } from '../../services/repository-service.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-repository',
@@ -23,7 +24,8 @@ export class RepositoryComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private repositoryService: RepositoryService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private readonly snackBar: MatSnackBar
   ){
     this.id = activatedRoute.snapshot.params['repositoryId'];
   }
@@ -61,6 +63,10 @@ export class RepositoryComponent implements OnInit {
       .subscribe(data => {
         let fileName = "repository.zip";
         saveAs(data.body!, fileName);
+      }, 
+      err => {
+        console.log(err.error.message);
+        this.snackBar.open(err.error.message, undefined, { duration: 2000 } );
       });
   }
 
