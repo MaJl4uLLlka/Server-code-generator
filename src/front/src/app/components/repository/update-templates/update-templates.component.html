@@ -119,10 +119,40 @@
     </mat-step> -->
     <mat-step>
       <ng-template matStepLabel>Done</ng-template>
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>If architecture type is REST API:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            npm install express body-parser sequelize
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>If architecture type is JSON-RPC:</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            npm install json-rpc-2.0 express body-parser sequelize
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>!!! Sequelize need a database package </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <a href="https://sequelize.org/docs/v6/getting-started/">Sequelize Docs</a>
+        </mat-card-content>
+      </mat-card>
+
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button color="primary" (click)="OnSubmit()">Update</button>
       </div>
     </mat-step>
   </mat-stepper>
