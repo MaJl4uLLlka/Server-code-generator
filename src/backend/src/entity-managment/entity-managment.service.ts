@@ -35,12 +35,14 @@ export class EntityManagmentService {
           create: {
             name: createEntityManagmentDto.name.trim(),
             repositoryId: repositoryId,
-            controller: {
-              create: {
-                name: createEntityManagmentDto.name.trim(),
-                repositoryId: repositoryId,
+            ...(repository.type === 'REST_API' && {
+              controller: {
+                create: {
+                  name: createEntityManagmentDto.name.trim(),
+                  repositoryId: repositoryId,
+                },
               },
-            },
+            }),
           },
         },
       },

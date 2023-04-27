@@ -15,6 +15,7 @@ Table User {
 Table Repository {
   id String [pk]
   name String [not null]
+  type RepositoryType [not null, default: 'REST_API']
   user User [not null]
   userId String [not null]
   entities Entity [not null]
@@ -83,6 +84,11 @@ Enum LinkType {
   OneToOne
   OneToMany
   ManyToMany
+}
+
+Enum RepositoryType {
+  REST_API
+  JSON_RPC
 }
 
 Ref: Repository.userId > User.id [delete: Cascade]

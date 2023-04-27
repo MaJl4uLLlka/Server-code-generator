@@ -21,6 +21,11 @@ enum LinkType {
   ManyToMany
 }
 
+enum RepositoryType {
+  REST_API
+  JSON_RPC
+}
+
 model User {
   id              String @id @default(uuid())
   email           String @unique
@@ -34,6 +39,7 @@ model User {
 model Repository {
   id         String         @id @default(uuid())
   name       String
+  type       RepositoryType @default(REST_API)
   user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   entities   Entity[]

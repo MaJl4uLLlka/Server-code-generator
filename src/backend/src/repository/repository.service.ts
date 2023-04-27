@@ -5,7 +5,8 @@ import { RepositoryQuery } from './dto/get-repository.dto';
 import { PrismaService } from '../services/prisma.service';
 import { StripeService } from '../services/stripe.service';
 import { User } from '@prisma/client';
-import { buildTemplate } from '../utils/templates/rest-api';
+import { buildTemplate as buildRestApiTemplate } from '../utils/templates/rest-api';
+import { buildTemplate as buildJsonRpcTemplate } from 'src/utils/templates/jsop-rpc';
 import AdmZip = require('adm-zip');
 
 @Injectable()
@@ -288,7 +289,11 @@ export class RepositoryService {
       repositoryId,
     );
 
-    const template = buildTemplate(repository);
+    const template =
+      repository.type === 'JSON_RPC'
+        ? buildJsonRpcTemplate(repository)
+        : buildRestApiTemplate(repository);
+
     const parsedPathes = template.match(/@@(.+)\.js;/g);
     const pathes = parsedPathes.map((path) =>
       path.replace('@@', '').replace(';', ''),

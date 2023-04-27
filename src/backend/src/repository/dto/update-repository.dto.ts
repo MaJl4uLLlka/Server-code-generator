@@ -29,6 +29,10 @@ export class UpdateRepositoryDto {
   name: string;
 
   @IsDefined()
+  @IsString()
+  type: 'JSON_RPC' | 'REST_API';
+
+  @IsDefined()
   @ValidateNested()
   @Type(() => UpdateConfigDto)
   config!: UpdateConfigDto;

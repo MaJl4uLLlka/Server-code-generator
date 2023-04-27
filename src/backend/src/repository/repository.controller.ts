@@ -11,6 +11,7 @@ import {
   Header,
   Res,
   StreamableFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { RepositoryService } from './repository.service';
 import { CreateRepositoryDto } from './dto/create-repository.dto';
@@ -18,10 +19,14 @@ import { UpdateRepositoryDto } from './dto/update-repository.dto';
 import { RepositoryQuery } from './dto/get-repository.dto';
 import { User } from '@prisma/client';
 import { Response } from 'express';
+import { SubscriptionService } from '../subscription/subscription.service';
 
 @Controller('repositories')
 export class RepositoryController {
-  constructor(private readonly repositoryService: RepositoryService) {}
+  constructor(
+    private readonly repositoryService: RepositoryService,
+    private readonly subsciptionService: SubscriptionService,
+  ) {}
 
   @Post()
   async create(
@@ -29,6 +34,19 @@ export class RepositoryController {
     @Body() createRepositoryDto: CreateRepositoryDto,
   ) {
     const user = req['user'] as User;
+    let subscription: any;
+    try {
+      subscription = await this.subsciptionService.getSubscription(
+        user.stripeAccountId,
+      );
+    } catch (err) {}
+
+    if (!subscription && createRepositoryDto.type === 'JSON_RPC') {
+      throw new BadRequestException(
+        'To create a JSON-RPC project need subscription',
+      );
+    }
+
     return await this.repositoryService.create(createRepositoryDto, user);
   }
 

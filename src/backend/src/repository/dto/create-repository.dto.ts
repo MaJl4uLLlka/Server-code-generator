@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsInt,
   Min,
+  IsISSN,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -27,6 +28,10 @@ export class CreateRepositoryDto {
   @IsDefined()
   @IsString()
   name: string;
+
+  @IsDefined()
+  @IsString()
+  type: 'JSON_RPC' | 'REST_API';
 
   @IsDefined()
   @ValidateNested()
