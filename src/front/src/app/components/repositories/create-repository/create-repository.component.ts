@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateRepositoryComponent {
   repositoryForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
+    type: new FormControl('REST_API', [Validators.required]),
     apiPrefix: new FormControl('/api/v1'),
     port: new FormControl(3000, [Validators.required]),
     dbConnectionUri: new FormControl('postgresql://localhost:5432/postgres', [Validators.required]),
@@ -39,6 +40,10 @@ export class CreateRepositoryComponent {
     return this.repositoryForm.get('port');
   }
 
+  get type() {
+    return this.repositoryForm.get('type');
+  }
+
   set portSetter(value: number) {
     this.repositoryForm.controls.port.setValue(value);
   }
@@ -63,6 +68,7 @@ export class CreateRepositoryComponent {
       };
       this.repositoryService.createRepository({
         name: value.name as string,
+        type: value.type!,
         config
       })
         .subscribe(

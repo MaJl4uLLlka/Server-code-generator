@@ -24,7 +24,7 @@ export class RepositoryService {
     })
   }
 
-  createRepository(repositoryData: { name: string, config: any }) {
+  createRepository(repositoryData: { name: string, type: string, config: any }) {
     return this.http.post(APPLICATION_DOMAIN + '/repositories', repositoryData, {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`

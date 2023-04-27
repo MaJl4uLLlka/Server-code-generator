@@ -13,6 +13,7 @@ export class UpdateRepositoryComponent implements OnInit {
   id: string;
   repositoryForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(10)]),
+    type: new FormControl('', [Validators.required]),
     apiPrefix: new FormControl('/api/v1'),
     port: new FormControl(3000, [Validators.required]),
     dbConnectionUri: new FormControl('postgresql://localhost:5432/postgres', [Validators.required]),
@@ -32,6 +33,10 @@ export class UpdateRepositoryComponent implements OnInit {
 
   get apiPrefix() {
     return this.repositoryForm.get('apiPrefix');
+  }
+
+  get repoType() {
+    return this.repositoryForm.get('type');
   }
 
   set apiPrefixSetter(value: string) {
@@ -54,6 +59,10 @@ export class UpdateRepositoryComponent implements OnInit {
     this.repositoryForm.controls.dbConnectionUri.setValue(value);
   }
 
+  set typeSetter(value: string) {
+    this.repositoryForm.controls.type.setValue(value);
+  }
+
   ngOnInit(): void {
     this.repositoryService.getRepositoryById(this.id)
     .subscribe(
@@ -62,6 +71,7 @@ export class UpdateRepositoryComponent implements OnInit {
         this.apiPrefixSetter = data.config.apiPrefix;
         this.portSetter = data.config.port;
         this.dbConnectionUriSetter = data.config.dbConnectionUri;
+        this.typeSetter = data.type;
       }
     )
   }
@@ -70,6 +80,7 @@ export class UpdateRepositoryComponent implements OnInit {
     if (this.repositoryForm.valid) {
       this.repositoryService.updateRepositoryName(this.id, {
         name: this.repositoryForm.value.name!,
+        type: this.repositoryForm.value.type!,
         config: {
           apiPrefix: this.repositoryForm.value.apiPrefix!,
           port: this.repositoryForm.value.port!,

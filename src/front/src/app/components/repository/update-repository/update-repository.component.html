@@ -7,6 +7,15 @@
             <mat-error *ngIf="name?.errors?.['required']">Repository name is required</mat-error>
         </mat-form-field>
 
+        <mat-form-field>
+            <mat-label> Arhitecture type</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="REST_API" disabled>REST API</mat-option>
+              <mat-option value="JSON_RPC" disabled>JSON-RPC</mat-option>
+            </mat-select>
+            <mat-error *ngIf="repoType?.errors?.['required']">Architecture is required</mat-error>
+          </mat-form-field>
+
         <h3>Config</h3>
         <mat-form-field>
             <mat-label>Api Prefix</mat-label>
