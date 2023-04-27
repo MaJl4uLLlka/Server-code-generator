@@ -1,0 +1,106 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  email String [unique, not null]
+  password String [not null]
+  nick String [unique, not null]
+  stripeAccountId String
+  repositories Repository [not null]
+  subscriptions Subscription [not null]
+}
+
+Table Repository {
+  id String [pk]
+  name String [not null]
+  user User [not null]
+  userId String [not null]
+  entities Entity [not null]
+  services Service [not null]
+  controllers Controller [not null]
+  config Config
+}
+
+Table Entity {
+  id String [pk]
+  name String [not null]
+  repository Repository [not null]
+  repositoryId String [not null]
+  schema Json [not null]
+  fromLinks Link [not null]
+  toLinks Link [not null]
+  service Service
+}
+
+Table Link {
+  id String [pk]
+  fromEntity Entity [not null]
+  fromEntityId String [not null]
+  toEntity Entity [not null]
+  toEntityId String [not null]
+  linkType LinkType [not null, default: 'None']
+}
+
+Table Service {
+  id String [pk]
+  name String [not null]
+  repository Repository [not null]
+  repositoryId String [not null]
+  entity Entity [not null]
+  entityId String [unique, not null]
+  controller Controller
+}
+
+Table Controller {
+  id String [pk]
+  name String [not null]
+  repository Repository [not null]
+  repositoryId String [not null]
+  service Service [not null]
+  serviceId String [unique, not null]
+}
+
+Table Subscription {
+  id String [pk]
+  stripeSubsctiptionId String [not null]
+  user User [not null]
+  userId String [not null]
+}
+
+Table Config {
+  id String [pk]
+  repository Repository [not null]
+  repositoryId String [unique, not null]
+  apiPrefix String
+  port Int [not null]
+  dbConnectionUri String [not null]
+}
+
+Enum LinkType {
+  None
+  OneToOne
+  OneToMany
+  ManyToMany
+}
+
+Ref: Repository.userId > User.id [delete: Cascade]
+
+Ref: Entity.repositoryId > Repository.id [delete: Cascade]
+
+Ref: Link.fromEntityId > Entity.id [delete: Cascade]
+
+Ref: Link.toEntityId > Entity.id [delete: Cascade]
+
+Ref: Service.repositoryId > Repository.id [delete: Cascade]
+
+Ref: Service.entityId - Entity.id [delete: Cascade]
+
+Ref: Controller.repositoryId > Repository.id [delete: Cascade]
+
+Ref: Controller.serviceId - Service.id [delete: Cascade]
+
+Ref: Subscription.userId > User.id [delete: Cascade]
+
+Ref: Config.repositoryId - Repository.id [delete: Cascade]
