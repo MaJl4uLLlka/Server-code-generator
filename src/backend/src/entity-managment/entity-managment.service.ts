@@ -193,4 +193,55 @@ export class EntityManagmentService {
       throw new BadRequestException('Primary key cannot be null');
     }
   }
+
+  async validateUpdateEntityData(
+    repositoryId: string,
+    entityId: string,
+    data: UpdateEntityManagmentDto,
+  ) {
+    const entity = await this.prismaService.entity.findUnique({
+      where: {
+        id: entityId,
+      },
+    });
+
+    if (entity.name !== data.name) {
+      const entitiesWithSameNames = await this.prismaService.entity.findMany({
+        where: {
+          AND: [{ repositoryId: repositoryId }, { name: data.name }],
+        },
+      });
+
+      if (entitiesWithSameNames.length !== 0) {
+        throw new BadRequestException(
+          'You already have an entity with this name',
+        );
+      }
+    }
+
+    const schema: Array<any> = JSON.parse(data.schema);
+
+    if (schema.length < 2) {
+      throw new BadRequestException('Entity must have at least 2 columns');
+    }
+
+    const columnNames = schema.map((column) => column.name);
+    const uniqueColumnNames = new Set(columnNames);
+
+    if (columnNames.length !== uniqueColumnNames.size) {
+      throw new BadRequestException('Columns must have unique names');
+    }
+
+    const primaryKeyColumns = schema.filter(
+      (column) => column.isPrimaryKey === true,
+    );
+
+    if (primaryKeyColumns.length !== 1) {
+      throw new BadRequestException('Primary key must be one');
+    }
+
+    if (primaryKeyColumns[0].isNull === true) {
+      throw new BadRequestException('Primary key cannot be null');
+    }
+  }
 }
