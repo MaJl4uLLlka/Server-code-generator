@@ -124,7 +124,7 @@ export class RepositoryService {
   }
 
   getServices(repositoryId: string) {
-    return this.http.get<{name: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/services', {
+    return this.http.get<{name: string, id: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/services', {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
       }
@@ -132,7 +132,7 @@ export class RepositoryService {
   }
 
   getControllers(repositoryId: string) {
-    return this.http.get<{name: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/controllers', {
+    return this.http.get<{name: string, id: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/controllers', {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
       }
@@ -140,7 +140,7 @@ export class RepositoryService {
   }
 
   getLinks(repositoryId: string) {
-    return this.http.get<{from: string, to: string, linkType: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/links', {
+    return this.http.get<{from: string, to: string, linkType: string, id: string}[]>(APPLICATION_DOMAIN + '/repositories/'+ repositoryId + '/links', {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
       }
@@ -149,6 +149,22 @@ export class RepositoryService {
 
   createLink(repositoryId: string, data: any) {
     return this.http.post(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId + '/create-link', data, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  getEntityById(repositoryId: string, entityId: string) {
+    return this.http.get(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId + '/' + entityId, {
+      headers: {
+        'app-auth': `${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  updateEntity(repositoryId: string, entityId: string, data: any) {
+    return this.http.put(APPLICATION_DOMAIN + '/entity-managment/'+ repositoryId + '/' + entityId, data, {
       headers: {
         'app-auth': `${localStorage.getItem('token')}`
       }

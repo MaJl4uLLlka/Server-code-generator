@@ -49,7 +49,7 @@ export class SignInComponent implements OnInit {
         data => {
           localStorage.setItem('token', data.token);
           this.commonService.sendUpdate({ isSigned: true });
-          this.router.navigate(['profile']);
+          this.router.navigate(['repositories']);
         },
         err => {
           console.log(err.error.message);

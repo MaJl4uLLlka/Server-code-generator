@@ -1,8 +1,8 @@
 <mat-toolbar color="primary">
-    <a mat-button routerLink="/info">Template service</a>
+    <a class="navbar-button" mat-raised-button routerLink="/info">Template service</a>
     <div class="spacer"></div>
-    <a mat-button *ngIf="isSigned" routerLink="/repositories">Repositories</a>
-    <a mat-raised-button *ngIf="!isSigned"  routerLink="/sign-up">Sign Up</a>
-    <a mat-raised-button *ngIf="isSigned"  routerLink="/profile">Profile</a>
-    <a (click)="logout()" mat-raised-button *ngIf="isSigned">Logout</a>
+    <a class="navbar-button" mat-raised-button *ngIf="isSigned" routerLink="/repositories">Repositories</a>
+    <a class="navbar-button" mat-raised-button *ngIf="!isSigned"  routerLink="/sign-up">Sign Up</a>
+    <a class="navbar-button" mat-raised-button *ngIf="isSigned"  routerLink="/profile">Profile</a>
+    <a class="navbar-button" (click)="logout()" mat-raised-button color="warn" *ngIf="isSigned">Logout</a>
 </mat-toolbar>

@@ -35,9 +35,17 @@
             <th mat-header-cell *matHeaderCellDef> Name </th>
             <td mat-cell *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
+
+          <!-- Update Column -->
+          <ng-container matColumnDef="update">
+            <th mat-header-cell *matHeaderCellDef> Update </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-raised-button routerLink="/repositories/{{id}}/{{element.id}}" color="accent">Update</button>
+            </td>
+          </ng-container>
       
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr mat-header-row *matHeaderRowDef="entityColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: entityColumns;"></tr>
         </table>
       </section>
     </mat-expansion-panel>

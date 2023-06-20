@@ -13,12 +13,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class RepositoryComponent implements OnInit {
   id: string;
   isUserOwner: boolean;
+  entityColumns: string[] = ['name', 'update'];
   displayedColumns: string[] = ['name'];
   linkColumns = ['from','linkType', 'to'];
-  links: {from: string, to: string, linkType: string}[] = [];
-  entities: { name: string}[] = [];
-  services: { name: string}[] = [];
-  controllers: { name: string}[] = [];
+  links: {from: string, to: string, linkType: string, id: string }[] = [];
+  entities: { name: string, id: string }[] = [];
+  services: { name: string, id: string }[] = [];
+  controllers: { name: string, id: string }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -74,7 +75,7 @@ export class RepositoryComponent implements OnInit {
     this.repositoryService.getEntities(this.id)
       .subscribe(
         data => {
-          this.entities = data.map(el => {return {name: el.name}});
+          this.entities = data;
         }
       );
 
@@ -88,17 +89,21 @@ export class RepositoryComponent implements OnInit {
     this.repositoryService.getServices(this.id)
         .subscribe(
           data => {
-            this.services = data.map(el => {return {name: el.name}});
+            this.services = data;
           }
         );
 
     this.repositoryService.getControllers(this.id)
           .subscribe(
             data => {
-              this.controllers = data.map(el => {return {name: el.name}});
+              this.controllers = data;
             }
           )
 
+  }
+
+  removeEntity(entityId: string) {
+    console.log(entityId);
   }
 }
 

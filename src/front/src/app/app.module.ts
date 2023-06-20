@@ -37,6 +37,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialogModule} from '@angular/material/dialog';
+import { UpdateEntityComponent } from './components/repository/update-entity/update-entity.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     UpdateRepositoryComponent,
     UpdateTemplatesComponent,
     DeleteRepositoryDialog,
+    UpdateEntityComponent,
   ],
   imports: [
     BrowserModule,

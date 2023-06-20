@@ -12,6 +12,7 @@ import { RepositoryComponent } from './components/repository/repository.componen
 import { CreateRepositoryComponent } from './components/repositories/create-repository/create-repository.component';
 import { UpdateRepositoryComponent } from './components/repository/update-repository/update-repository.component';
 import { UpdateTemplatesComponent } from './components/repository/update-templates/update-templates.component';
+import { UpdateEntityComponent } from './components/repository/update-entity/update-entity.component';
 
 const routes: Routes = [
   { path: 'info', pathMatch: 'full', component: InfoComponent },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'repositories/update/:repositoryId', pathMatch: 'full', component: UpdateRepositoryComponent },
   { path: 'repositories/:repositoryId', pathMatch: 'full', component: RepositoryComponent},
   { path: 'repositories/:repositoryId/templates', pathMatch: 'full', component: UpdateTemplatesComponent},
+  { path: 'repositories/:repositoryId/:entityId', pathMatch: 'full', component: UpdateEntityComponent},
 ];
 
 @NgModule({

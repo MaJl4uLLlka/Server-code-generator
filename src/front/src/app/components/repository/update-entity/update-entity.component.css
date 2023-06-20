@@ -1,0 +1,22 @@
+.template-form {
+  display: block;
+  width: 100%;
+}
+
+.template-form-container {
+  display: block;
+  width: 100%;
+}
+
+.form-field {
+  width: 100%;
+  max-height: 50vh;
+}
+
+.form-label {
+  color: #F2F2F2;
+}
+
+table {
+  width: 100%;
+}

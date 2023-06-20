@@ -77,6 +77,11 @@ export class EntityManagmentController {
     @Param('id') id: string,
     @Body() updateEntityManagmentDto: UpdateEntityManagmentDto,
   ) {
+    await this.entityManagmentService.validateEntityData(
+      repositoryId,
+      updateEntityManagmentDto,
+    );
+
     return await this.entityManagmentService.update(
       repositoryId,
       id,
