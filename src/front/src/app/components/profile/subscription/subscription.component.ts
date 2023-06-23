@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SubscriptionComponent implements OnInit {
   hasSubscription = false;
+  subscriptionData: {periodStart: Date, periodEnd: Date};
   cardForm = new FormGroup({
     number: new FormControl('', [Validators.required, cardNumber()]),
     exp_month:  new FormControl('', [Validators.required, monthValue()]),
@@ -24,7 +25,12 @@ export class SubscriptionComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptionService.getSubscription()
       .subscribe(
-        data => { this.hasSubscription = true },
+        (data: any) => { 
+          this.hasSubscription = true;
+          this.subscriptionData = {periodEnd: new Date(), periodStart: new Date()};
+          this.subscriptionData.periodStart = new Date(data.current_period_start * 1000);
+          this.subscriptionData.periodEnd = new Date(data.current_period_end * 1000);
+        },
       );
   }
 

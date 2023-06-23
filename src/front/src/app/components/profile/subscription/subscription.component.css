@@ -13,3 +13,18 @@
 .white-color {
     color: #F2F2F2;
 }
+
+.example-card {
+    background-color: gray;
+    max-width: 400px;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+.example-card  p {
+    font-size: 14px;
+}
+
+.example-card mat-card-title {
+    font-size: 16px;
+}
